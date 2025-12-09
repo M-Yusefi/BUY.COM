@@ -37,9 +37,7 @@ class VendorController extends Controller
     public function apply()
     {
         $userId = Auth::id();
-
         $vendorQuery = Vendor::where('user_id', $userId);
-        
         if ($vendorQuery->exists()) {
             return back();
         }
@@ -48,14 +46,8 @@ class VendorController extends Controller
 
     public function vendorsOverview() 
     {
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $vendors = Vendor::all();
-            return view('admin.vendor', compact('vendors'));
-        } else {
-            return back()->with('error', 'You are not authorized to view this page.');
-        }
+        $vendors = Vendor::all();
+        return view('admin.vendor', compact('vendors'));
     }
 
     public function venodrStatus(Request $request, Vendor $vendor) 
@@ -73,6 +65,6 @@ class VendorController extends Controller
             User::where('id', $vendor->user_id)
             ->update(['role' => 'vendor']);
         }
-        return back();
+        return back()->with('success', "De status van vendor {$vendor->shop_name} is bijgewerkt.");
     }
 }

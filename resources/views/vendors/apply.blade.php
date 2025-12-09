@@ -7,14 +7,6 @@
 
     <div class="py-12 bg-gray-100">
         <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-            
-            @if (session('success'))
-                <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-md">
-                    <p class="font-bold">Success!</p>
-                    <p>{{ session('success') }}</p>
-                </div>
-            @endif
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white shadow-xl rounded-2xl p-8 flex flex-col h-full border border-blue-100">
                     <h1 class="text-3xl font-extrabold mb-4 text-gray-800">Apply Now to Sell Your Products</h1>

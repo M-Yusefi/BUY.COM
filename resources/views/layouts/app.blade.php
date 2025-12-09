@@ -11,6 +11,9 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -29,6 +32,33 @@
 
             <!-- Page Content -->
             <main class="flex-grow p-6">
+                @if (session('error'))
+                    <script>
+                        Swal.fire({
+                            icon: 'error', 
+                            title: 'Fout!',
+                            text: '{{ session('error') }}', 
+                            toast: true, 
+                            position: 'top', 
+                            showConfirmButton: false,
+                            timer: 4000 
+                        });
+                    </script>
+                    @endif
+
+                    @if (session('success'))
+                    <script>
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Succes!',
+                            text: '{{ session('success') }}',
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 4000
+                        });
+                    </script>
+                @endif
                 {{ $slot }}
             </main>
 
