@@ -14,7 +14,25 @@ use App\Models\Review;
 use App\Models\User;
 
 class VendorController extends Controller
-{
+{   
+    // Vendor dashboard view
+    public function dashboard() 
+    {
+        return view('vendor.dashboard');
+    }
+
+    // Vendor apply view
+    public function apply()
+    {
+        $userId = Auth::id();
+        $vendorQuery = Vendor::where('user_id', $userId);
+        if ($vendorQuery->exists()) {
+            return back();
+        }
+        return view('vendor.apply');
+    }
+
+    // Vendor apply function
     public function store(Request $request)
     {
         $userId = Auth::id(); 
@@ -32,39 +50,5 @@ class VendorController extends Controller
         ]);
 
         return view('dashboard.index');
-    }
-
-    public function apply()
-    {
-        $userId = Auth::id();
-        $vendorQuery = Vendor::where('user_id', $userId);
-        if ($vendorQuery->exists()) {
-            return back();
-        }
-        return view('vendors.apply');
-    }
-
-    public function vendorsOverview() 
-    {
-        $vendors = Vendor::all();
-        return view('admin.vendor', compact('vendors'));
-    }
-
-    public function venodrStatus(Request $request, Vendor $vendor) 
-    {
-        $validated = $request->validate([ 
-            'status' => ['required', 'string', 'in:pending,active,blocked'],
-        ]);    
-
-        $vendor->status = $validated['status'];
-        $vendor->save();
-
-        $vendor->refresh();
-
-        if ($validated['status'] === 'active' && $vendor->user) {
-            User::where('id', $vendor->user_id)
-            ->update(['role' => 'vendor']);
-        }
-        return back()->with('success', "De status van vendor {$vendor->shop_name} is bijgewerkt.");
     }
 }

@@ -70,7 +70,7 @@
                                                 {{ Str::limit($vendor['bio'], 50) }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                                <form action="{{ route('vendors.venodrStatus', ['vendor' => $vendor->id]) }}" method="POST" class="inline-flex items-center space-x-2">
+                                                <form action="{{ route('admin.venodrStatus', ['vendor' => $vendor->id]) }}" method="POST" class="inline-flex items-center space-x-2">
                                                     @csrf
                                                     @method('PUT')
                                                     <select name="status" id="vendorStatus-{{ $vendor->id }}" 

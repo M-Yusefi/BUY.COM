@@ -5,8 +5,8 @@
             <div class="flex justify-between w-full">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard.index') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="{{ route('home') }}">
+                        <x-application-logo class="block h-20 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
                 <div>
@@ -16,16 +16,24 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @auth
-                        <x-nav-link :href="route('dashboard.index')" :active="request()->routeIs('dashboard.index')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
+                        @if (Auth::user()->role === 'admin')
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                                {{ __('Admin Dashboard') }}
+                            </x-nav-link>
+
+                        @elseif (Auth::user()->role === 'vendor')
+                            <x-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.dashboard')">
+                                {{ __('Vendor Dashboard') }}
+                            </x-nav-link>
+
+                        @else
+                            <x-nav-link :href="route('dashboard.index')" :active="request()->routeIs('dashboard.index')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                        @endif
                     @else 
                         <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
-                            {{ __('Log in') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
-                            {{ __('Register') }}
+                            <span class="material-symbols-outlined">account_box</span>
                         </x-nav-link>
                     @endauth
                 </div>
@@ -82,9 +90,27 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard.index')" :active="request()->routeIs('dashboard.index')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @auth
+                @if (Auth::user()->role === 'admin')
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                        {{ __('Admin Dashboard') }}
+                    </x-responsive-nav-link>
+
+                @elseif (Auth::user()->role === 'vendor')
+                    <x-responsive-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.dashboard')">
+                        {{ __('Vendor Dashboard') }}
+                    </x-responsive-nav-link>
+
+                @else
+                    <x-responsive-nav-link :href="route('dashboard.index')" :active="request()->routeIs('dashboard.index')">
+                        {{ __('Dashboard') }}
+                    </x-responsive-nav-link>
+                @endif
+            @else 
+                <x-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                    <span class="material-symbols-outlined">account_box</span>
+                </x-nav-link>
+            @endauth
         </div>
 
         <!-- Responsive Settings Options -->

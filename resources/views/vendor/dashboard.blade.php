@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex flex-row justify-between">
-            <div class="flex items-center space-x-6">
-                <h2 class="font-extrabold text-2xl text-gray-900 leading-tight py-2 px-3">
-                    {{ __('Home') }}
+            <div>
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    {{ __('Dashboard') }}
                 </h2>
             </div>
         </div>
@@ -13,7 +13,11 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    {{ __("Home page") }}
+                    {{ __("Admin dash") }}
+
+                    <div id="resultsContainer" >
+
+                    </div>
                 </div>
             </div>
         </div>

@@ -24,7 +24,7 @@
                 <div class="bg-white shadow-xl rounded-2xl p-8 flex flex-col h-full border border-gray-200">
                     <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-3">Vendor Application Form</h2>
                     
-                    <form action="{{ route('vendors.store') }}" method="POST" class="flex flex-col gap-6 flex-1">
+                    <form action="{{ route('vendor.store') }}" method="POST" class="flex flex-col gap-6 flex-1">
                         @csrf 
 
                         <div class="flex flex-col">

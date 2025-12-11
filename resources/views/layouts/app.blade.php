@@ -10,21 +10,23 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0&icon_names=account_box" />
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/categories.js'])
     </head>
+
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                <header class="bg-white shadow border-b border-gray-200 py-3">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
@@ -36,7 +38,7 @@
                     <script>
                         Swal.fire({
                             icon: 'error', 
-                            title: 'Fout!',
+                            title: 'Error!',
                             text: '{{ session('error') }}', 
                             toast: true, 
                             position: 'top', 
@@ -50,7 +52,7 @@
                     <script>
                         Swal.fire({
                             icon: 'success',
-                            title: 'Succes!',
+                            title: 'Success!',
                             text: '{{ session('success') }}',
                             toast: true,
                             position: 'top',
@@ -66,11 +68,11 @@
                 <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
                     <!-- Sectie 1: Vendor call-to-action -->
                     <div>
-                        <h3 class="text-lg font-semibold mb-2">Word Vendor</h3>
-                        <p class="text-gray-700 mb-2">Start je eigen shop en bereik duizenden klanten.</p>
-                        <a href="{{ route('vendors.apply') }}" 
+                        <h3 class="text-lg font-semibold mb-2">Become a Vendor</h3>
+                        <p class="text-gray-700 mb-2">Start your own shop and reach thousands of customers.</p>
+                        <a href="{{ route('vendor.apply') }}" 
                         class="text-blue-600 font-semibold hover:underline">
-                            Aanvragen
+                            Apply Now
                         </a>
                     </div>
 
@@ -79,8 +81,8 @@
                         <h3 class="text-lg font-semibold mb-2">Links</h3>
                         <ul class="space-y-1">
                             <li><a href="/" class="text-gray-700 hover:text-blue-600">Home</a></li>
-                            <li><a href="/products" class="text-gray-700 hover:text-blue-600">Producten</a></li>
-                            <li><a href="/about" class="text-gray-700 hover:text-blue-600">Over ons</a></li>
+                            <li><a href="/products" class="text-gray-700 hover:text-blue-600">Products</a></li>
+                            <li><a href="/about" class="text-gray-700 hover:text-blue-600">About us</a></li>
                             <li><a href="/contact" class="text-gray-700 hover:text-blue-600">Contact</a></li>
                         </ul>
                     </div>

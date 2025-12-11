@@ -3,13 +3,13 @@
         <div class="flex flex-row justify-between">
             <div class="flex items-center space-x-6">
                 <h2 class="font-extrabold text-2xl text-gray-900 leading-tight py-2 px-3">
-                    {{ __('Create Product') }}
+                    {{ __('Create Categories') }}
                 </h2>
             </div>
         </div>
     </x-slot>
 
-<div class="py-12">
+    <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white shadow-xl rounded-2xl p-8 flex flex-col h-full border border-blue-100">
@@ -26,17 +26,17 @@
                 </div>
 
                 <div class="bg-white shadow-xl rounded-2xl p-8 flex flex-col h-full border border-gray-200">
-                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-3">Create Product</h2>
+                    <h2 class="text-2xl font-semibold mb-6 text-gray-700 border-b pb-3">Create Categories</h2>
                     
-                    <form action="{{ route('products.store') }}" method="POST" class="flex flex-col gap-6 flex-1">
+                    <form action="{{ route('categories.store') }}" method="POST" class="flex flex-col gap-6 flex-1">
                         @csrf 
 
                         <div class="flex flex-col">
-                            <label for="productName" class="mb-2 font-medium text-gray-700">Product Name <span class="text-red-500">*</span></label>
+                            <label for="categoryName" class="mb-2 font-medium text-gray-700">Category Name <span class="text-red-500">*</span></label>
                             <input type="text" id="name" name="name" 
                                 class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 w-full 
                                     @error('name') border-red-500 ring-red-500 @enderror" 
-                                placeholder="HP laptop">
+                                placeholder="Electronics">
                         </div>
 
                         <div class="flex flex-col">
@@ -48,8 +48,8 @@
                         </div>
 
                         <div class="flex flex-col">
-                            <label for="category_id" class="mb-2 font-medium text-gray-700">Category (<span class="text-blue-500">Optional</span>)</label>
-                            <select name="category_id" id="category_id">
+                            <label for="parent_id" class="mb-2 font-medium text-gray-700">Parent Category (<span class="text-blue-500">Optional</span>)</label>
+                            <select name="parent_id" id="parent_id">
 
                             </select>
                         </div>
@@ -66,4 +66,9 @@
             </div>        
         </div>
     </div>
+
+    <script>
+        const categoriesUrl = "{{ route('categories.allCategories') }}";
+    </script>
 </x-app-layout>
+
