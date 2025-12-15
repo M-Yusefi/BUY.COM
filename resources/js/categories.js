@@ -1,5 +1,5 @@
 const resultsContainer = document.getElementById('resultsContainer');
-const parent_child_select = document.getElementById('parent_id');
+const parent_child_select = document.getElementById('category_id');
 
 // Parent-child options creeren voor de createCat.blade.php
 function generateCatOptions() {

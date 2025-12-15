@@ -49,7 +49,7 @@
 
                         <div class="flex flex-col">
                             <label for="parent_id" class="mb-2 font-medium text-gray-700">Parent Category (<span class="text-blue-500">Optional</span>)</label>
-                            <select name="parent_id" id="parent_id">
+                            <select name="category_id" id="category_id">
 
                             </select>
                         </div>
@@ -65,10 +65,11 @@
                 </div>
             </div>        
         </div>
-    </div>
 
-    <script>
-        const categoriesUrl = "{{ route('categories.allCategories') }}";
-    </script>
+        <script>
+            const categoriesUrl = "{{ route('categories.allCategories') }}";
+        </script>
+
+    </div>
 </x-app-layout>
 

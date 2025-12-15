@@ -3,7 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Vendor;
+use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Transaction;
+use App\Models\Review;
+use App\Models\User;
 
 class ProductsController extends Controller
 {
@@ -20,7 +28,7 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -28,7 +36,30 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userId = Auth::id(); 
+
+        $validated = $request->validate([
+            'category_id' => 'required|integer',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|integer',
+            'stock' => 'required|integer',
+            'status' => 'required'
+        ]);
+
+        $name = $validated['name'];
+
+        Product::create([
+            'vendor_id' => $userId,
+            'category_id' => $validated['category_id'],
+            'name' => $name,
+            'description' => $validated['description'] ?? null,
+            'price' => $validated['price'],
+            'stock' => $validated['stock'],
+            'status' => $validated['status']
+        ]);
+
+        return back()->with('success', "The product ({$name}) is successfully created");
     }
 
     /**

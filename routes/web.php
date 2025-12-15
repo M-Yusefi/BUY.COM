@@ -15,9 +15,6 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->middleware(['auth', 'verified'])->name('dashboard.index');
 
 Route::middleware('auth')->group(function () {
     
@@ -26,18 +23,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 require __DIR__.'/auth.php';
-
-// Default
-Route::middleware(['auth', 'verified'])->group(function (){
-
-    // Customer dash
-    Route::get('/dashboard', function () { return view('dashboard.index');})->name('dashboard.index');
-    
-    // Vendor apply functions
-    Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');
-    Route::post('/store', [VendorController::class , 'store'])->name('vendor.store');
-});
-
 
 // Admin Route
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function (){
@@ -50,14 +35,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::put('/vendor/{vendor}/status', [AdminController::class, 'venodrStatus'])->name('venodrStatus');
 });
 
-
+// Category CRUD -> Admin acces only
 Route::middleware(['auth', 'role:admin'])->prefix('categories')->name('categories.')->group(function (){
     
     // Categories functions
-    Route::get('/categories', [CategoriesController::class, 'index'])->name('categories');
-    Route::get('/categories/create', [CategoriesController::class, 'createCatView'])->name('createCat');
-    Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->name('allCategories');
-    Route::post('/categories/store', [CategoriesController::class, 'store'])->name('store');
+    Route::get('/index', [CategoriesController::class, 'index'])->name('categories');
+    Route::get('/create', [CategoriesController::class, 'createCatView'])->name('createCat');
+    Route::post('/store', [CategoriesController::class, 'store'])->name('store');
 });
 
 // Vendor Route
@@ -70,6 +54,28 @@ Route::middleware(['auth', 'role:vendor'])->prefix('vendor')->name('vendor.')->g
     Route::get('/create', [ProductsController::class, 'create'])->name('products.create');
     Route::post('/storeProduct', [ProductsController::class, 'store'])->name('products.store');
 });
+
+// Product CRUD -> Vendor acces only
+Route::middleware(['auth', 'role:vendor'])->prefix('products')->name('products.')->group(function (){
+    Route::get('/create', [ProductsController::class, 'create'])->name('create');
+    Route::post('store', [ProductsController::class, 'store'])->name('store');
+});
+
+
+// Defult Route -> login required
+Route::middleware(['auth', 'verified'])->group(function (){
+    // Customer dash
+    Route::get('/dashboard', function () { return view('dashboard.index');})->name('dashboard.index');
+    
+    // Vendor apply functions
+    Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');
+    Route::post('/store', [VendorController::class , 'store'])->name('vendor.store');
+});
+
+// Free acces
+Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->name('categories.allCategories');
+
+
 
 
 

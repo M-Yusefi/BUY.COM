@@ -9,13 +9,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, string $role): Response
+    public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         if (!Auth::check()) {
             return redirect('/login');
         }
 
-        if (Auth::user()->role !== $role) {
+        $userRole = Auth::user()->role ?? null;
+
+        if (empty($roles) || !in_array($userRole, $roles)) {
             return redirect('/dashboard')->with('error', 'U heeft geen toegang tot deze pagina.');
         }
 

@@ -50,15 +50,38 @@
                         <div class="flex flex-col">
                             <label for="category_id" class="mb-2 font-medium text-gray-700">Category (<span class="text-blue-500">Optional</span>)</label>
                             <select name="category_id" id="category_id">
-
                             </select>
                         </div>
 
+                        <div class="flex flex-col">
+                            <label for="price" class="mb-2 font-medium text-gray-700">Price <span class="text-red-500">*</span></label>
+                            <input type="number" id="price" name="price"
+                                class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 w-full 
+                                        @error('price') border-red-500 ring-red-500 @enderror" 
+                                placeholder="899.00">
+                        </div>
+
+                        <div class="felx flex-col">
+                            <label for="stock" class="mb-2 font-medium text-gray-700">Stock <span class="text-red-500">*</span></label>
+                            <input type="number" id="stock" name="stock"
+                                class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 w-full 
+                                        @error('stock') border-red-500 ring-red-500 @enderror" 
+                                placeholder="50">
+                        </div>
+
+                        <div class="felx flex-col">
+                            <label for="status" class="mb-2 font-medium text-gray-700">Status </label>
+                            <select name="status" id="status">
+                                <option value="draft" selected>Draft</option>
+                                <option value="lice">Live</option>
+                            </select>
+                        </div>
+                        
                         <div class="mt-auto pt-4">
                             <button type="submit" 
                                 class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold text-lg
                                     hover:bg-blue-700 transition duration-300 transform hover:scale-[1.01] w-full shadow-lg shadow-blue-500/50">
-                                Send Application
+                                Create
                             </button>
                         </div>
                     </form>
@@ -66,4 +89,8 @@
             </div>        
         </div>
     </div>
+
+    <script>
+        const categoriesUrl = "{{ route('categories.allCategories') }}";
+    </script>
 </x-app-layout>
