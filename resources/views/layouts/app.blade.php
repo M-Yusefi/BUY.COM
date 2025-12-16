@@ -16,7 +16,12 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/categories.js'])
+        @vite([
+            'resources/css/app.css', 
+            'resources/js/app.js', 
+            'resources/js/categories.js',
+            'resources/js/products.js'
+        ])
     </head>
 
     <body class="font-sans antialiased">
@@ -104,7 +109,13 @@
                 <div class="mt-6 border-t pt-4 text-center text-gray-500 text-sm">
                     &copy; {{ date('Y') }} BUY.COM. All rights reserved.
                 </div>
-            </footer>        
+            </footer> 
+            
+            <script>
+                const productsIndexUrl = "{{ route('products.index') }}";
+                const categoriesUrl = "{{ route('categories.allCategories') }}";
+            </script>
+            
         </div>
     </body>
 </html>

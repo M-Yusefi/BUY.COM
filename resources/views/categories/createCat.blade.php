@@ -65,11 +65,6 @@
                 </div>
             </div>        
         </div>
-
-        <script>
-            const categoriesUrl = "{{ route('categories.allCategories') }}";
-        </script>
-
     </div>
 </x-app-layout>
 

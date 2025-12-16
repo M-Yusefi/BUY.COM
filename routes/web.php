@@ -58,7 +58,8 @@ Route::middleware(['auth', 'role:vendor'])->prefix('vendor')->name('vendor.')->g
 // Product CRUD -> Vendor acces only
 Route::middleware(['auth', 'role:vendor'])->prefix('products')->name('products.')->group(function (){
     Route::get('/create', [ProductsController::class, 'create'])->name('create');
-    Route::post('store', [ProductsController::class, 'store'])->name('store');
+    Route::post('/store', [ProductsController::class, 'store'])->name('store');
+    Route::get('/index', [ProductsController::class, 'index'])->name('index');
 });
 
 

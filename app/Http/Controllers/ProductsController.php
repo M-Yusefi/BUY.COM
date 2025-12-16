@@ -15,56 +15,42 @@ use App\Models\User;
 
 class ProductsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $userId = Auth::id();
+
+        $products = Product::where('vendor_id', $userId)->get();
+
+        return response()->json([
+            'products' => $products
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('products.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $userId = Auth::id(); 
-
         $validated = $request->validate([
-            'category_id' => 'required|integer',
+            'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|integer',
-            'stock' => 'required|integer',
-            'status' => 'required'
+            'price' => 'required|numeric',
+            'stock' => 'required|integer|min:0',
+            'status' => 'required|in:draft,live'
         ]);
 
-        $name = $validated['name'];
+        $vendor = Vendor::where('user_id', Auth::id())->firstOrFail(); 
 
-        Product::create([
-            'vendor_id' => $userId,
-            'category_id' => $validated['category_id'],
-            'name' => $name,
-            'description' => $validated['description'] ?? null,
-            'price' => $validated['price'],
-            'stock' => $validated['stock'],
-            'status' => $validated['status']
-        ]);
-
-        return back()->with('success', "The product ({$name}) is successfully created");
+        Product::create(array_merge($validated, [
+            'vendor_id' => $vendor->id,
+        ]));
+        
+        return back()->with('success', "The product ({$validated['name']}) is successfully created");
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
