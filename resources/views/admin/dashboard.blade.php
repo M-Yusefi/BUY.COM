@@ -25,17 +25,104 @@
             </div>
         </div>
     </x-slot>
+
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("Admin dash") }}
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+            <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
+                <a href="{{ route('admin.vendor') }}" 
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-lg 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
 
-                    <div id="resultsContainer" >
-
+                    <div class="p-4 text-center">
+                        <p class="text-3xl font-extrabold tracking-tight">
+                            {{ __('Vendors') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-2">
+                            {{ $vendors}}
+                        </p>
                     </div>
-                </div>
+                </a>
+            </div>    
+
+            <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
+                <a  
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-lg 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
+
+                    <div class="p-4 text-center">
+                        <p class="text-3xl font-extrabold tracking-tight">
+                            {{ __('Products') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-2">
+                            {{ $products }}
+                        </p>
+                    </div>
+                </a>
             </div>
-        </div>
+            
+            <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
+                <a href="{{ route('categories.categories') }}"
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-lg 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
+
+                    <div class="p-4 text-center">
+                        <p class="text-3xl font-extrabold tracking-tight">
+                            {{ __('Caegories') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-2">
+                            {{ $categories }}
+                        </p>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
+                <a
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-lg 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
+
+                    <div class="p-4 text-center">
+                        <p class="text-3xl font-extrabold tracking-tight">
+                            {{ __('Orders') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-2">
+                            {{ $orders }}
+                        </p>
+                    </div>
+                </a>
+            </div>    
+
+            <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
+                <a
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-lg 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
+
+                    <div class="p-4 text-center">
+                        <p class="text-3xl font-extrabold tracking-tight">
+                            {{ __('Transaction') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-2">
+                            {{ $transaction }}
+                        </p>
+                    </div>
+                </a>
+            </div>    
+
+        </div>    
     </div>
 </x-app-layout>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\Product;
+use App\Models\ProductImage;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
@@ -17,9 +18,27 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $userId = Auth::id();
+        return view('products.index');
+    }
 
-        $products = Product::where('vendor_id', $userId)->get();
+    /**
+     * Return products JSON for AJAX requests.
+     */
+    public function data(Request $request)
+    {
+        $userId = Auth::id();
+        
+        // Get vendor by user_id
+        $vendor = Vendor::where('user_id', $userId)->first();
+        
+        if (!$vendor) {
+            return response()->json([
+                'products' => [],
+                'error'    => 'Vendor not found for this user'
+            ]);
+        }
+
+        $products = Product::where('vendor_id', $vendor->id)->with(['category', 'images'])->get();
 
         return response()->json([
             'products' => $products
@@ -33,50 +52,116 @@ class ProductsController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'category_id' => 'required|exists:categories,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer|min:0',
-            'status' => 'required|in:draft,live'
-        ]);
+        try {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:categories,id',
+                'name'        => 'required|string|max:255',
+                'images'      => 'required',
+                'images.*'    => 'image|mimes:jpeg,jpg,png,webp|max:2048',
+                'description' => 'nullable|string',
+                'price'       => 'required|numeric',
+                'stock'       => 'required|integer|min:0',
+                'status'      => 'required|in:draft,live'
+            ]);
 
-        $vendor = Vendor::where('user_id', Auth::id())->firstOrFail(); 
+            $vendor = Vendor::where('user_id', Auth::id())->firstOrFail(); 
 
-        Product::create(array_merge($validated, [
-            'vendor_id' => $vendor->id,
-        ]));
-        
-        return back()->with('success', "The product ({$validated['name']}) is successfully created");
+            $product = Product::create(array_merge(
+                collect($validated)->except('images')->toArray(), 
+                ['vendor_id' => $vendor->id,]
+            ));
+
+            if ($request->hasFile('images')) {
+
+                $currentImagesCount = 0;
+
+                foreach ($request->file('images') as $index => $image) {
+                    $path = $image->store('products', 'public');
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_path' => $path,
+                        'alt_text'   => $product->name,
+                        'is_main'    => ($currentImagesCount === 0 && $index === 0),
+                        'order'      => $currentImagesCount + $index
+                    ]);
+                }
+            }
+
+            return back()->with('success', "The product ({$validated['name']}) is successfully created");
+        } catch (\Exception $e) {
+            return back()->with('error', "Error creating product: {$e->getMessage()}");
+        }
     }
 
-    public function show(string $id)
+    public function destroy(Product $product)
     {
-        //
+        try {
+            $vendor = Vendor::where('user_id', Auth::id())->firstOrFail();
+
+            if ($product->vendor_id !== $vendor->id) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            // Delete associated images
+            $product->images()->delete();
+
+            // Delete product
+            $product->delete();
+
+            return back()->with('success', 'The product has been successfully deleted');
+        } catch (\Exception $e) {
+            return back()->with('error', "Error deleting product: {$e->getMessage()}");
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Product $product)
     {
-        //
+        return view('products.update', compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Product $product)
     {
-        //
-    }
+        try {
+            $validated = $request->validate([
+                'category_id' => 'required|exists:categories,id',
+                'name'        => 'required|string|max:255',
+                'images'      => 'nullable',
+                'images.*'    => 'image|mimes:jpeg,jpg,png,webp|max:2048',
+                'description' => 'nullable|string',
+                'price'       => 'required|numeric',
+                'stock'       => 'required|integer|min:0',
+                'status'      => 'required|in:draft,live'
+            ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            $vendor = Vendor::where('user_id', Auth::id())->firstOrFail();
+
+            if ($product->vendor_id !== $vendor->id) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            $product->update(collect($validated)->except('images')->toArray());
+
+            if ($request->hasFile('images')) {
+
+                $currentImagesCount = $product->images()->count();
+
+                foreach ($request->file('images') as $index => $image) {
+                    $path = $image->store('products', 'public');
+
+                    ProductImage::create([
+                        'product_id' => $product->id,
+                        'image_path' => $path,
+                        'alt_text'   => $product->name,
+                        'is_main'    => ($currentImagesCount === 0 && $index === 0),
+                        'order'      => $currentImagesCount + $index
+                    ]);
+                }
+            }
+
+            return back()->with('success', "The product ({$product->name}) is successfully updated");
+        } catch (\Exception $e) {
+            return back()->with('error', "Error updating product: {$e->getMessage()}");
+        }
     }
 }

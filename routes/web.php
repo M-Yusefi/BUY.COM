@@ -49,17 +49,20 @@ Route::middleware(['auth', 'role:vendor'])->prefix('vendor')->name('vendor.')->g
     
     // Vendor dash
     Route::get('/dashboard', [VendorController::class, 'dashboard'])->name('dashboard');
-
-    // Product functions 
-    Route::get('/create', [ProductsController::class, 'create'])->name('products.create');
-    Route::post('/storeProduct', [ProductsController::class, 'store'])->name('products.store');
+    Route::get('/index' , [VendorController::class, 'index'])->name('index');
 });
 
 // Product CRUD -> Vendor acces only
 Route::middleware(['auth', 'role:vendor'])->prefix('products')->name('products.')->group(function (){
     Route::get('/create', [ProductsController::class, 'create'])->name('create');
     Route::post('/store', [ProductsController::class, 'store'])->name('store');
-    Route::get('/index', [ProductsController::class, 'index'])->name('index');
+    Route::get('/{product}/edit', [ProductsController::class, 'edit'])->name('edit');
+    Route::put('/{product}', [ProductsController::class, 'update'])->name('update');
+    Route::delete('/{product}', [ProductsController::class, 'destroy'])->name('destroy');
+    // product listing page
+    Route::get('/', [ProductsController::class, 'index'])->name('index');
+    // AJAX/data endpoint for products JSON
+    Route::get('/data', [ProductsController::class, 'data'])->name('data');
 });
 
 

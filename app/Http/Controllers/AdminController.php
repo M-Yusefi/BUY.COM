@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Vendor;
 use App\Models\Product;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
@@ -18,7 +19,19 @@ class AdminController extends Controller
     // Admin dashboard view
     public function dashboard() 
     {
-        return view('admin.dashboard');
+        $vendors = count(Vendor::all());
+        $categories = count(Category::all());
+        $products = count(Product::all());
+        $orders = count(Order::all());
+        $transaction = count(Transaction::all());
+
+        return view('admin.dashboard', [
+            'vendors'     => $vendors,
+            'categories'  => $categories,
+            'products'    => $products,
+            'orders'      => $orders,
+            'transaction' => $transaction
+        ]);
     }
 
     // Vendors overview

@@ -33,21 +33,21 @@ class CategoriesController extends Controller
         return response()->json([
             'categories' => $allCat,
         ]);
-    }
+    } 
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'parent_id' => 'nullable|integer'
+            'category_id' => 'nullable|integer'
         ]);
 
-        $parentId = ($validated['parent_id'] == 0) ? null : $validated['parent_id'];
+        $parentId = ($validated['category_id'] ?? 0) == 0 ? null : $validated['category_id'];
 
         Category::create([
-            'name' => $request->name,
-            'description' => $request->description,
+            'name' => $validated['name'],
+            'description' => $validated['description'],
             'parent_id' => $parentId
         ]);
 

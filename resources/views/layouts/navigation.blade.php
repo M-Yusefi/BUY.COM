@@ -1,7 +1,7 @@
 <nav x-data="{ open: false }" class="bg-blue-600 border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between h-20">
             <div class="flex justify-between w-full">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
@@ -18,12 +18,12 @@
                     @auth
                         @if (Auth::user()->role === 'admin')
                             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                                {{ __('Admin Dashboard') }}
+                                {{ __('Dashboard') }}
                             </x-nav-link>
 
                         @elseif (Auth::user()->role === 'vendor')
                             <x-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.dashboard')">
-                                {{ __('Vendor Dashboard') }}
+                                {{ __('Dashboard') }}
                             </x-nav-link>
 
                         @else

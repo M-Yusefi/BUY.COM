@@ -11,6 +11,7 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,400,0,0&icon_names=account_box" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -25,7 +26,7 @@
     </head>
 
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+        <div class="min-h-screen flex flex-col bg-gray-100">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
@@ -48,26 +49,31 @@
                             toast: true, 
                             position: 'top', 
                             showConfirmButton: false,
-                            timer: 4000 
+                            timer: 10000 
                         });
                     </script>
                     @endif
 
                     @if (session('success'))
-                    <script>
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: '{{ session('success') }}',
-                            toast: true,
-                            position: 'top',
-                            showConfirmButton: false,
-                            timer: 4000
-                        });
-                    </script>
-                @endif
-                {{ $slot }}
-            </main>
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success!',
+                                text: '{{ session('success') }}',
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 4000
+                            });
+                        </script>
+                    @endif
+
+                    @isset($slot)
+                        {{ $slot }}
+                    @else
+                        @yield('content')
+                    @endisset
+                </main>
 
             <footer class="bg-white shadow border-t border-blue-600 p-6 mt-8">
                 <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
@@ -112,7 +118,7 @@
             </footer> 
             
             <script>
-                const productsIndexUrl = "{{ route('products.index') }}";
+                const productsIndexUrl = "{{ route('products.data') }}";
                 const categoriesUrl = "{{ route('categories.allCategories') }}";
             </script>
             

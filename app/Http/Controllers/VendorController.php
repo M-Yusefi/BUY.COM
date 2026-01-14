@@ -18,7 +18,30 @@ class VendorController extends Controller
     // Vendor dashboard view
     public function dashboard() 
     {
-        return view('vendor.dashboard');
+        $userId = Auth::id();
+        
+        // Get vendor by user_id
+        $vendor = Vendor::where('user_id', $userId)->first();
+        
+        if (!$vendor) {
+            return view([
+                'products' => [],
+                'error' => 'Vendor not found for this user'
+            ]);
+        }
+
+        $products = Product::where('vendor_id', $vendor->id)->get();
+
+        $totalProducts = count($products);
+
+        return view('vendor.dashboard', [
+            'totalProducts' => $totalProducts
+        ]);
+    }
+
+    public function index()
+    {
+        return view('vendor.index');
     }
 
     // Vendor apply view
