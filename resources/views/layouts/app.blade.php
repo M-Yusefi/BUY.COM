@@ -118,8 +118,9 @@
             </footer> 
             
             <script>
-                const productsIndexUrl = "{{ route('products.data') }}";
+                const vendorProductsDataUrl = "{{ route('products.data') }}";
                 const categoriesUrl = "{{ route('categories.allCategories') }}";
+                const products_index_url = "{{ route('products.index_data') }}";
             </script>
             
         </div>

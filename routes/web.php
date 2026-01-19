@@ -59,8 +59,7 @@ Route::middleware(['auth', 'role:vendor'])->prefix('products')->name('products.'
     Route::get('/{product}/edit', [ProductsController::class, 'edit'])->name('edit');
     Route::put('/{product}', [ProductsController::class, 'update'])->name('update');
     Route::delete('/{product}', [ProductsController::class, 'destroy'])->name('destroy');
-    // product listing page
-    Route::get('/', [ProductsController::class, 'index'])->name('index');
+
     // AJAX/data endpoint for products JSON
     Route::get('/data', [ProductsController::class, 'data'])->name('data');
 });
@@ -78,6 +77,8 @@ Route::middleware(['auth', 'verified'])->group(function (){
 
 // Free acces
 Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->name('categories.allCategories');
+Route::get('/products/index', [ProductsController::class, 'index'])->name('products.index');
+Route::get('/products/index_data', [ProductsController::class, 'index_data'])->name('products.index_data');
 
 
 

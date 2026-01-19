@@ -6,14 +6,8 @@
 	</x-slot>
 
 	<div class="py-12">
-		<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-			<div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-				<div class="p-6">
-					<div class="overflow-x-auto bg-white shadow rounded">
-						
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+        <div id="products_index" class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+
+        </div>
+    </div>
 </x-app-layout>

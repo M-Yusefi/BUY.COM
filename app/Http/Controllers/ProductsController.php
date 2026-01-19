@@ -21,6 +21,14 @@ class ProductsController extends Controller
         return view('products.index');
     }
 
+    public function index_data(Request $request)
+    {
+        $products = Product::with('vendor', 'category', 'images')->get();
+
+        return response()->json([
+            'products' => $products
+        ]);
+    }
     /**
      * Return products JSON for AJAX requests.
      */

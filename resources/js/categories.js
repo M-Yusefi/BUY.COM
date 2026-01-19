@@ -44,7 +44,7 @@ function indexCategories() {
 
             mainCategories.forEach((main) => {
                 const filteredSubs = subCategories.filter(sub => sub.parent_id == main.id);
-                let subListHtml = '<ul class="space-y-1 text-gray-600">'; // Verwijder 'list-disc' als je geen bolletjes wilt
+                let subListHtml = '<ul class="space-y-1 text-gray-600">'; 
 
                 if (filteredSubs.length > 0) {
                     filteredSubs.forEach((sub) => {
@@ -73,7 +73,6 @@ function indexCategories() {
             
             index_cat_view += '</div>';
 
-            console.log(index_cat_view);
             index_categories.innerHTML = index_cat_view;
         })
 }

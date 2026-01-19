@@ -9,10 +9,28 @@
                         <x-application-logo class="block h-20 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
-                <div>
 
+                <div class="flex items-center justify-center w-full max-w-2xl mx-8">
+                    <div class="relative flex w-full">
+                        <input 
+                            type="text" 
+                            id="searchInput" 
+                            placeholder="Search for products, e.g. iPhone 17..." 
+                            value="{{ request('query') }}" 
+                            class="w-full h-12 px-6 bg-gray-100 border-2 border-transparent rounded-l-full focus:bg-white focus:border-blue-600 focus:ring-0 outline-none transition-all text-gray-700"
+                        >
+                        
+                        <button 
+                            type="button" 
+                            id="searchButton"
+                            class="flex items-center justify-center px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-r-full transition-colors min-w-[80px] border-2 border-blue-600"
+                        >
+                            <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                            <span class="ml-2 font-bold hidden lg:block text-sm uppercase tracking-wider">Search</span>
+                        </button>                
+                    </div>
                 </div>
-
+                
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @auth
