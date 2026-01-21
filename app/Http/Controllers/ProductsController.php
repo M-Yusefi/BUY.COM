@@ -177,29 +177,16 @@ class ProductsController extends Controller
 
         if ($query) {
             try {
-                $response = Product::where('name', $query);
-
-                if ($response->failed()) {
-                    return response()->json([
-                        'status'  => 'error',
-                        'message' => 'Failed to make a conection to the database',
-                    ], 400);
-                }
-
-                $data = $response->json();
-                $products = $data['products'];
+                $products = Product::with('images') 
+                    ->where('name', 'LIKE', '%' . $query . '%')
+                    ->get();
 
                 return response()->json([
                     'status' => 'success',
-                    'query'  => $query,
                     'products' => $products
                 ]);
-            }catch (\Exception $e) {
-                \Log::error('Database error: ' . $e->getMessage());
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Onverwachte interne fout bij het verwerken van het verzoek.'
-                ], 500);
+            } catch (\Exception $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
             }
         }
     }
@@ -208,23 +195,14 @@ class ProductsController extends Controller
     // Verwijdert het opgegeven product uit de database.
     public function destroy(Product $product)
     {
-        try {
-            $vendor = Vendor::where('user_id', Auth::id())->firstOrFail();
-
-            if ($product->vendor_id !== $vendor->id) {
-                abort(403, 'Unauthorized action.');
-            }
-
-            // Delete associated images
-            $product->images()->delete();
-
-            // Delete product
-            $product->delete();
-
-            return back()->with('success', 'The product has been successfully deleted');
-        } catch (\Exception $e) {
-            return back()->with('error', "Error deleting product: {$e->getMessage()}");
+        if ($product->vendor_id !== Auth::user()->vendor->id) {
+            return back()->with('error', 'Unauthorized action.');
         }
+
+        $product->images()->delete();
+        $product->delete();
+
+        return back()->with('success', 'Product deleted successfully.');
     }
     //</>//
 }

@@ -2,11 +2,12 @@ const parent_child_select = document.getElementById("category_id");
 const index_categories = document.getElementById("index_categories");
 
 function generateCatOptions() {
+    if (!parent_child_select) return;
     fetch(category_url)
         .then((response) => response.json())
         .then((data) => {
             const categories = data.categories || [];
-            
+
             const mainCategories = categories.filter((cat) => !cat.parent_id);
             const subCategories = categories.filter((cat) => cat.parent_id);
 
@@ -15,8 +16,10 @@ function generateCatOptions() {
             mainCategories.forEach((main) => {
                 view += `<option value="${main.id}" class="font-bold text-blue-600">${main.name.toUpperCase()}</option>`;
 
-                const filteredSubs = subCategories.filter(sub => sub.parent_id == main.id);
-                
+                const filteredSubs = subCategories.filter(
+                    (sub) => sub.parent_id == main.id,
+                );
+
                 filteredSubs.forEach((sub) => {
                     view += `<option value="${sub.id}">&nbsp;&nbsp;&nbsp;-- ${sub.name}</option>`;
                 });
@@ -24,27 +27,32 @@ function generateCatOptions() {
             parent_child_select.innerHTML = view;
         })
         .catch((error) => {
-            console.error("Fout bij zoeken:", error);
-            parent_child_select.innerHTML = `<option class="text-xl text-red-700">Er is een fout opgetreden: ${error.message}</option>`;
+            console.error("Fout bij laden categorieën:", error);
+            if (parent_child_select) {
+                parent_child_select.innerHTML = `<option class="text-xl text-red-700">Er is een fout opgetreden: ${error.message}</option>`;
+            }
         });
 }
 generateCatOptions();
 
-
 function indexCategories() {
+    if (!index_categories) return;
     fetch(category_url)
         .then((response) => response.json())
         .then((data) => {
             const categories = data.categories || [];
-            
+
             const mainCategories = categories.filter((cat) => !cat.parent_id);
             const subCategories = categories.filter((cat) => cat.parent_id);
 
-            let index_cat_view = '<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">';
+            let index_cat_view =
+                '<div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">';
 
             mainCategories.forEach((main) => {
-                const filteredSubs = subCategories.filter(sub => sub.parent_id == main.id);
-                let subListHtml = '<ul class="space-y-1 text-gray-600">'; 
+                const filteredSubs = subCategories.filter(
+                    (sub) => sub.parent_id == main.id,
+                );
+                let subListHtml = '<ul class="space-y-1 text-gray-600">';
 
                 if (filteredSubs.length > 0) {
                     filteredSubs.forEach((sub) => {
@@ -53,9 +61,10 @@ function indexCategories() {
                                         </li>`;
                     });
                 } else {
-                    subListHtml += '<li class="text-sm italic text-gray-400">No subcategories yet</li>';
+                    subListHtml +=
+                        '<li class="text-sm italic text-gray-400">No subcategories yet</li>';
                 }
-                subListHtml += '</ul>';
+                subListHtml += "</ul>";
                 index_cat_view += `
                 <div class="shadow-xl rounded-lg h-80 w-full flex flex-col border-4 border-blue-500 overflow-hidden">
                     <div class="bg-blue-500 text-white p-6 h-1/2 flex items-center justify-center">
@@ -70,10 +79,17 @@ function indexCategories() {
                     </div>
                 </div>`;
             });
-            
-            index_cat_view += '</div>';
+
+            index_cat_view += "</div>";
 
             index_categories.innerHTML = index_cat_view;
         })
+        .catch((error) => {
+            console.error("Fout bij laden categorieën:", error);
+            if (index_categories) {
+                index_categories.innerHTML =
+                    '<p class="text-red-700">Er is een fout opgetreden bij het laden van categorieën.</p>';
+            }
+        });
 }
 indexCategories();

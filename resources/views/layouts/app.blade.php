@@ -121,6 +121,7 @@
                 const vendor_items_url = "{{ route('products.data') }}";
                 const category_url = "{{ route('categories.allCategories') }}";
                 const index_items_url = "{{ route('products.index_data') }}";
+                const search_url = "{{ route('products.search') }}";
             </script>
             
         </div>

@@ -28,7 +28,7 @@
 
 	<div class="py-12">
         <div class="max-w-7xl mx-auto py-12 px-4">
-            <div class="grid grid-cols-1 gap-8 bg-white p-8 rounded-2xl shadow">
+            <div class="grid grid-cols-1 bg-white rounded-2xl shadow">
                 
                 <div>
                     @if($product->images->count() > 0)
@@ -38,7 +38,7 @@
                     @endif
                 </div>
 
-                <div>
+                <div class="p-8">
                     <h1 class="text-3xl font-bold">{{ $product->name }}</h1>
                     <p class="text-blue-600 font-semibold">{{ $product->category->name ?? 'No Category'}}</p>
                     <div class="mt-4 text-gray-600">

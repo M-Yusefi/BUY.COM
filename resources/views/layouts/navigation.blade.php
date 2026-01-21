@@ -10,25 +10,26 @@
                     </a>
                 </div>
 
-                <div class="flex items-center justify-center w-full max-w-2xl mx-8">
-                    <div class="relative flex w-full">
+                <div class="relative flex flex-col justify-center items-center w-full max-w-2xl mx-8">
+                    <div class="relative flex w-full ">
                         <input 
                             type="text" 
-                            name="query"
                             id="searchInput" 
                             placeholder="Search for products, e.g. iPhone 17..." 
                             value="{{ $query ?? '' }}" 
-                            class="w-full h-12 px-6 bg-gray-100 border-2 border-transparent rounded-l-full focus:bg-white focus:border-blue-600 focus:ring-0 outline-none transition-all text-gray-700"
+                            class="w-full h-12 text-lg px-6 bg-gray-100 border-2 border-transparent rounded-l-full focus:bg-white focus:border-blue-600 focus:ring-0 outline-none transition-all text-gray-700"
                         >
                         
                         <button 
                             type="button" 
-                            id="searchButton"
-                            class="flex items-center justify-center px-8 bg-blue-600 hover:bg-blue-700 text-white rounded-r-full transition-colors min-w-[80px] border-2 border-blue-600"
+                            class="flex items-center justify-center px-8 bg-blue-600 text-white text-lg rounded-r-full min-w-[80px]"
                         >
-                            <i class="fa-solid fa-magnifying-glass text-lg"></i>
-                            <span class="ml-2 font-bold hidden lg:block text-sm uppercase tracking-wider">Search</span>
+                            <i class="fa-solid fa-magnifying-glass"></i>
                         </button>                
+                    </div>
+
+                    <div id="result_container" class="hidden absolute top-full left-0 w-full mt-2 bg-white shadow-2xl rounded-xl border border-gray-200 z-50 max-h-96 overflow-y-auto">
+                        <!--Search result_container --> 
                     </div>
                 </div>
                 
@@ -63,7 +64,7 @@
                 <div class="hidden sm:flex sm:items-center sm:ms-6">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-m leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                                 <div>{{ Auth::user()->name }}</div>
 
                                 <div class="ms-1">
