@@ -14,9 +14,10 @@
                     <div class="relative flex w-full">
                         <input 
                             type="text" 
+                            name="query"
                             id="searchInput" 
                             placeholder="Search for products, e.g. iPhone 17..." 
-                            value="{{ request('query') }}" 
+                            value="{{ $query ?? '' }}" 
                             class="w-full h-12 px-6 bg-gray-100 border-2 border-transparent rounded-l-full focus:bg-white focus:border-blue-600 focus:ring-0 outline-none transition-all text-gray-700"
                         >
                         

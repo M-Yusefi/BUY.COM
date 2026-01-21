@@ -16,6 +16,7 @@ use App\Models\User;
 
 class ProductsController extends Controller
 {
+    // Haalt alle producten op en rendert deze in de index-view.
     public function index()
     {
         return view('products.index');
@@ -29,14 +30,24 @@ class ProductsController extends Controller
             'products' => $products
         ]);
     }
-    /**
-     * Return products JSON for AJAX requests.
-     */
+    //</>//
+    
+
+    //  Haalt de details van een specifiek product op voor weergave in de show-view.
+    public function show(Product $product)
+    {
+        $product->load(['vendor', 'category', 'images']);
+
+        return view('products.show', compact('product'));
+    }
+    //</>//
+
+
+    // Haalt vendor-specifieke producten op en retourneert deze als JSON voor de frontend.
     public function data(Request $request)
     {
         $userId = Auth::id();
         
-        // Get vendor by user_id
         $vendor = Vendor::where('user_id', $userId)->first();
         
         if (!$vendor) {
@@ -52,7 +63,10 @@ class ProductsController extends Controller
             'products' => $products
         ]);
     }
+    //</>//
 
+
+    // Navigeert naar de create-pagina en verwerkt het formulier om de data op te slaan in de database.
     public function create()
     {
         return view('products.create');
@@ -101,28 +115,10 @@ class ProductsController extends Controller
             return back()->with('error', "Error creating product: {$e->getMessage()}");
         }
     }
+    //</>//
 
-    public function destroy(Product $product)
-    {
-        try {
-            $vendor = Vendor::where('user_id', Auth::id())->firstOrFail();
 
-            if ($product->vendor_id !== $vendor->id) {
-                abort(403, 'Unauthorized action.');
-            }
-
-            // Delete associated images
-            $product->images()->delete();
-
-            // Delete product
-            $product->delete();
-
-            return back()->with('success', 'The product has been successfully deleted');
-        } catch (\Exception $e) {
-            return back()->with('error', "Error deleting product: {$e->getMessage()}");
-        }
-    }
-
+    // Navigeert naar de edit-pagina en slaat de gewijzigde gegevens op in de database.
     public function edit(Product $product)
     {
         return view('products.update', compact('product'));
@@ -172,4 +168,63 @@ class ProductsController extends Controller
             return back()->with('error', "Error updating product: {$e->getMessage()}");
         }
     }
+    //</>//
+
+    //Zoekt de opgefragde query op en stuut die naar de JS
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        if ($query) {
+            try {
+                $response = Product::where('name', $query);
+
+                if ($response->failed()) {
+                    return response()->json([
+                        'status'  => 'error',
+                        'message' => 'Failed to make a conection to the database',
+                    ], 400);
+                }
+
+                $data = $response->json();
+                $products = $data['products'];
+
+                return response()->json([
+                    'status' => 'success',
+                    'query'  => $query,
+                    'products' => $products
+                ]);
+            }catch (\Exception $e) {
+                \Log::error('Database error: ' . $e->getMessage());
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Onverwachte interne fout bij het verwerken van het verzoek.'
+                ], 500);
+            }
+        }
+    }
+    //</>//
+
+    // Verwijdert het opgegeven product uit de database.
+    public function destroy(Product $product)
+    {
+        try {
+            $vendor = Vendor::where('user_id', Auth::id())->firstOrFail();
+
+            if ($product->vendor_id !== $vendor->id) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            // Delete associated images
+            $product->images()->delete();
+
+            // Delete product
+            $product->delete();
+
+            return back()->with('success', 'The product has been successfully deleted');
+        } catch (\Exception $e) {
+            return back()->with('error', "Error deleting product: {$e->getMessage()}");
+        }
+    }
+    //</>//
 }

@@ -118,9 +118,9 @@
             </footer> 
             
             <script>
-                const vendorProductsDataUrl = "{{ route('products.data') }}";
-                const categoriesUrl = "{{ route('categories.allCategories') }}";
-                const products_index_url = "{{ route('products.index_data') }}";
+                const vendor_items_url = "{{ route('products.data') }}";
+                const category_url = "{{ route('categories.allCategories') }}";
+                const index_items_url = "{{ route('products.index_data') }}";
             </script>
             
         </div>

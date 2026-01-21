@@ -1,8 +1,13 @@
-const vendorIndexResult = document.getElementById("vendorIndexResult");
-const productsIndexResult = document.getElementById("products_index");
+const vendor_index_result = document.getElementById('vendorIndexResult');
+const products_index_result = document.getElementById('products_index');
+const serach_input = document.getElementById('searchInput');
 
+serach_input.addEventListener('input', () => {
+    searchProduct(serach_input.value);
+});
+//Verwerkt de Vendor productgegevens die vanuit de ProductController worden aangeleverd.
 function vendorIndex() {
-    fetch(vendorProductsDataUrl)
+    fetch(vendor_items_url)
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Network error or server fault.");
@@ -52,83 +57,95 @@ function vendorIndex() {
                     `</tr>`;
             });
 
-            vendorIndexResult.innerHTML = view;
+            vendor_index_result.innerHTML = view;
         })
         .catch((error) => {
             console.error(error);
-            vendorIndexResult.innerHTML = `<tr><td>No products found </td></tr>`;
+            vendor_index_result.innerHTML = `<tr><td>No products found </td></tr>`;
     });
 }
 vendorIndex();
+//</>//
 
+
+// Haalt productgegevens op uit de controller en rendert deze in de index-container
 function product_index() {
-    fetch(products_index_url)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network error or server fault.");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            const products = data.products || [];
-            let view = "";
+fetch(index_items_url)
+    .then((response) => {
+        if (!response.ok) throw new Error("Network error or server fault.");
+        return response.json();
+    })
+    .then((data) => {
+        const products = data.products || [];
+        let view = "";
 
-            // Als er geen producten zijn
-            if (products.length === 0) {
-                productsIndexResult.innerHTML = '<p class="text-center col-span-full text-gray-500">No products available at the moment.</p>';
-                return;
-            }
+        if (products.length === 0) {
+            products_index_result.innerHTML = '<p class="text-center col-span-full text-gray-500">No products available.</p>';
+            return;
+        }
 
-            products.forEach((element) => {
-                const id = element.id;
-                const name = element.name;
-                const categoryName = element.category?.name || "General";
-                const price = parseFloat(element.price).toFixed(2);
-                const vendor = element.vendor?.name || "Official Store";
+        // 1. Bouw eerst de volledige HTML op
+        products.forEach((element) => {
+            const id = element.id;
+            const price = parseFloat(element.price).toFixed(2);
+            const vendor = element.vendor?.shop_name || "Official Store";
+            const firstImage = element.images && element.images.length > 0 
+                ? `/storage/${element.images[0].image_path}` 
+                : "/path/to/placeholder.png";
 
-                // Afbeelding logica
-                const mainImage = element.images && element.images.length > 0 ? element.images[0] : null;
-                const imageHtml = mainImage
-                    ? `<img src="/storage/${mainImage.image_path}" alt="${name}" class="w-full h-48 object-contain p-4 group-hover:scale-105 transition-transform duration-300">`
-                    : `<div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">No image</div>`;
-
-                // De kaart opbouw (met Flexbox voor nette uitlijning)
-                view += `
-                    <div class="group bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
-                        <a href="/products/${id}" class="flex-grow">
-                            <div class="relative bg-gray-50 overflow-hidden">
-                                ${imageHtml}
-                            </div>
-
-                            <div class="p-5">
-                                <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">${categoryName}</span>
-                                <h1 class="text-gray-800 font-semibold text-lg line-clamp-2 mt-1 mb-2 h-14">${name}</h1>
-                                <p class="text-sm text-gray-500 italic mb-4">By ${vendor}</p>
-                                
-                                <div class="flex items-center justify-between">
-                                    <span class="text-2xl font-black text-gray-900">€${price}</span>
-                                </div>
-                            </div>
-                        </a>
-                        
-                        <div class="p-5 pt-0 mt-auto">
-                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-cart-shopping text-sm"></i>
-                                Add to Cart
-                            </button>
+            view += `
+                <div class="product_card bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
+                    <a href="/products/${id}" class="flex-grow">
+                        <div class="relative bg-gray-50 overflow-hidden">
+                            <img id="img_${id}" src="${firstImage}" alt="${element.name}" class="w-full h-48 object-contain p-4 transition-opacity duration-500 opacity-100">
                         </div>
+                        <div class="p-5">
+                            <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">${element.category?.name || "General"}</span>
+                            <h1 class="text-gray-800 font-semibold text-lg line-clamp-2 mt-1 mb-2 h-14">${element.name}</h1>
+                            <p class="text-sm text-gray-500 italic mb-4">By ${vendor}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-2xl font-black text-gray-900">€${price}</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="p-5 pt-0 mt-auto">
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-shopping text-sm"></i> Add to Cart
+                        </button>
                     </div>
-                `;
-            });
-
-            productsIndexResult.innerHTML = view;
-        })
-        .catch((error) => {
-            console.error("Error fetching products:", error);
-            productsIndexResult.innerHTML = `<div class="col-span-full py-10 text-center text-red-600 font-bold font-mono text-xl">
-                ERROR: Could not load products. Please try again later.
-            </div>`;
+                </div>`;
         });
-}
 
+        // 2. Plaats de HTML in de container (DIT IS CRUCIAAL)
+        products_index_result.innerHTML = view;
+
+        // 3. Start pas daarna de timers voor de afbeeldingen
+        products.forEach((element) => {
+            const allImages = element.images && element.images.length > 1 
+                ? element.images.map(img => `/storage/${img.image_path}`) 
+                : [];
+
+            if (allImages.length > 1) {
+                let currentIndex = 0;
+                const imgId = `img_${element.id}`;
+                
+                setInterval(() => {
+                    const imgElement = document.getElementById(imgId);
+                    if (imgElement) {
+                        imgElement.style.opacity = '0';
+                        setTimeout(() => {
+                            currentIndex = (currentIndex + 1) % allImages.length;
+                            imgElement.src = allImages[currentIndex];
+                            imgElement.style.opacity = '1';
+                        }, 500);
+                    }
+                }, 10000); // 10 seconden zoals gevraagd
+            }
+        });
+    })
+    .catch((error) => {
+        console.error("Error fetching products:", error);
+        products_index_result.innerHTML = `<div class="col-span-full py-10 text-center text-red-600 font-bold">ERROR: Could not load products.</div>`;
+    });
+}
 product_index();

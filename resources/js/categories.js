@@ -2,7 +2,7 @@ const parent_child_select = document.getElementById("category_id");
 const index_categories = document.getElementById("index_categories");
 
 function generateCatOptions() {
-    fetch(categoriesUrl)
+    fetch(category_url)
         .then((response) => response.json())
         .then((data) => {
             const categories = data.categories || [];
@@ -32,7 +32,7 @@ generateCatOptions();
 
 
 function indexCategories() {
-    fetch(categoriesUrl)
+    fetch(category_url)
         .then((response) => response.json())
         .then((data) => {
             const categories = data.categories || [];
