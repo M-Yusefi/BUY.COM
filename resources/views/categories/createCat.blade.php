@@ -49,7 +49,9 @@
 
                         <div class="flex flex-col">
                             <label for="category_id" class="mb-2 font-medium text-gray-700">Parent Category (<span class="text-blue-500">Optional</span>)</label>
-                            <select name="category_id" id="category_id" class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 w-full">
+                            <select name="category_id" class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 w-full">
+                                <option value="0" class="font-bold text-blue-700">Main Catagory</option>
+                                <p id="category_id"></p>
                             </select>
                         </div>
 

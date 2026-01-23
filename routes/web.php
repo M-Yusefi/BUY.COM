@@ -79,6 +79,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
 Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->name('categories.allCategories');
 Route::get('/products/index', [ProductsController::class, 'index'])->name('products.index');
 Route::get('/products/index_data', [ProductsController::class, 'index_data'])->name('products.index_data');
+Route::get('/categories/filter' , [CategoriesController::class, 'filter'])->name('categories.filter');
 Route::get('/products/search' , [ProductsController::class, 'search'])->name('products.search');
 Route::get('/products/{product}', [ProductsController::class, 'show'])->name('products.show');
 

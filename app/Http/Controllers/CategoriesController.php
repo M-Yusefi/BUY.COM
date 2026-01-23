@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\User;
 use App\Models\Vendor;
 use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
 use App\Models\Review;
-use App\Models\User;
 
 class CategoriesController extends Controller
 {
@@ -54,9 +55,32 @@ class CategoriesController extends Controller
         return back()->with('success', 'Categorie succesvol aangemaakt.');
     }
 
-    public function show(string $id)
+    public function filter(Request $request)
     {
-        //
+        $query = $request->query('query');
+
+        if (!$query) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No Products found.'
+            ], 400);
+        }   
+
+        if ($query) {
+            try {
+                $products = Product::with('images', 'vendor', 'category')
+                    ->where('category_id', 'LIKE', '%' . $query . '%')
+                    ->get();
+
+                return response()->json([
+                    'status'   => 'success',
+                    'products' => $products,
+                    'query'    => $query
+                ]);
+            } catch (\Exception $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            }
+        } 
     }
 
     public function edit(string $id)

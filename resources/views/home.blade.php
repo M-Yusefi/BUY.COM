@@ -12,14 +12,16 @@
                 
                 {{-- All Products Link --}}
                 <a href="{{ route('products.index') }}" 
-                class="text-m font-medium text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out py-2 px-3 rounded-lg hover:bg-gray-50">
+                class="appearance-none bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                    focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none w-68 transition-all duration-300 cursor-pointer">
                     All Products 
                 </a>
 
                 {{-- Category Link --}}
                 <p 
                 id="index_category"
-                class="text-m font-medium text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out py-2 px-3 rounded-lg hover:bg-gray-50">
+                class="appearance-none bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                    focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none w-68 transition-all duration-300 cursor-pointer">
                     Category 
                 </p>
             </div>

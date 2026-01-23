@@ -1,12 +1,21 @@
-const vendor_index_result = document.getElementById("vendorIndexResult");
+// Container voor de producten van de momenteel ingelogde verkoper (vendor)
+const vendor_index_result = document.getElementById("vendorIndexResult"); 
+
+// De hoofdsectie waar de volledige lijst van alle producten wordt getoond
 const products_index_result = document.getElementById("products_index");
-const serach_input = document.getElementById("searchInput");
+
+// Het invoerveld dat de zoekopdrachten van de gebruiker vastlegt
+const search_input = document.getElementById("searchInput");
+
+// De container waarin de zoekresultaten worden weergegeven
 const result_container = document.getElementById("result_container");
 
-serach_input.addEventListener("input", () => {
-    search(serach_input.value);
+// Eventlistener voor de zoekveld
+search_input.addEventListener("input", () => {
+    search(search_input.value);
 });
-//Verwerkt de Vendor productgegevens die vanuit de ProductController worden aangeleverd.
+
+// Verwerkt de Vendor productgegevens die vanuit de ProductController worden aangeleverd.
 function vendorIndex() {
     if (!vendor_index_result) return;
     fetch(vendor_items_url)
@@ -29,19 +38,15 @@ function vendorIndex() {
                 const stock = element.stock;
                 const status = element.status;
 
-                // Get first image (main image)
-                const mainImage =
-                    element.images && element.images.length > 0
-                        ? element.images[0]
-                        : null;
+                const mainImage = element.images?.[0]?.image_path;
                 const imageHtml = mainImage
-                    ? `<img src="/storage/${mainImage.image_path}" alt="${mainImage.alt_text}" class="w-12 h-12 object-cover rounded">`
-                    : `<span class="text-gray-400">No image</span>`;
+                        ? `<img src="/storage/${mainImage}" class="w-10 h-10 object-cover">` 
+                        : `<div class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded"><i class="fa-solid fa-image text-gray-400"></i></div>`;
 
                 view +=
                     `<tr id="product-${id}">\n` +
                     `<td class="px-4 py-2 sm:px-4 sm:py-4 whitespace-nowrap">${imageHtml}</td>` +
-                    `<td class="px-4 py-2 sm:px-4 sm:py-4 text-m whitespace-nowrap">${name}</td>` +
+                    `<td class="px-4 py-2 sm:px-4 sm:py-4 text-m" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${name}</td>` +
                     `<td class="px-4 py-2 sm:px-4 sm:py-4 text-m whitespace-nowrap">${categoryName}</td>` +
                     `<td class="px-4 py-2 sm:px-4 sm:py-4 text-m" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${desc}</td>` +
                     `<td class="px-4 py-2 sm:px-4 sm:py-4 text-m font-bold text-blue-600 whitespace-nowrap">€${parseFloat(price).toFixed(2)}</td>` +
@@ -95,17 +100,17 @@ function product_index() {
                 const id = element.id;
                 const price = parseFloat(element.price).toFixed(2);
                 const vendor = element.vendor?.shop_name || "Official Store";
-                const firstImage =
-                    element.images && element.images.length > 0
-                        ? `/storage/${element.images[0].image_path}`
-                        : "/path/to/placeholder.png";
+                const mainImage = element.images?.[0]?.image_path;
+                const imageHtml = mainImage
+                    ? `/storage/${mainImage}`
+                    : "/path/to/placeholder.png";
 
                 view += `
                 <div class="product_card bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
                     <a href="/products/${id}" class="flex-grow">
-                        <div class="relative bg-gray-50 overflow-hidden aspect-[5/4]">
+                        <div class="relative w-full h-48 overflow-hidden rounded-t-lg bg-gray-100">
                             <img id="img_${id}" 
-                            src="${firstImage}" 
+                            src="${imageHtml}" 
                             alt="${element.name}" 
                             class="w-full h-48 object-cover transition-opacity duration-500 opacity-100">
                         </div>
@@ -168,6 +173,7 @@ function product_index() {
 product_index();
 //</>//
 
+// Search Functie
 function search(query) {
     fetch(search_url + "?query=" + query)
         .then(result => result.json())
@@ -213,3 +219,4 @@ function search(query) {
             result_container.classList.add('hidden');
         });
 }
+//</>//

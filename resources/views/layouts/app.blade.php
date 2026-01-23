@@ -122,6 +122,7 @@
                 const category_url = "{{ route('categories.allCategories') }}";
                 const index_items_url = "{{ route('products.index_data') }}";
                 const search_url = "{{ route('products.search') }}";
+                const category_filter_url = "{{ route('categories.filter') }}";
             </script>
             
         </div>
