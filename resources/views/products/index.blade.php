@@ -3,7 +3,7 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             
             <div class="flex-shrink-0">
-                <h2 class="font-extrabold text-2xl text-blue-600 tracking-tight">
+                <h2 id="product_index_header" class="font-extrabold text-2xl text-blue-600 tracking-tight">
                     All Products
                 </h2>
             </div>

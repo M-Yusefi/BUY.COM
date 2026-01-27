@@ -2,6 +2,7 @@ const category_id = document.getElementById("category_id");
 const admin_index_categories = document.getElementById("admin_index_categories");
 const products_index_result = document.getElementById("products_index");
 const index_filter_category = document.getElementById("index_filter_category");
+const products_index_header = document.getElementById("product_index_header");
 
 index_filter_category.addEventListener('change' , () => {
     filterCategory(index_filter_category.value);
@@ -130,6 +131,8 @@ function filterCategory (query) {
                         ? `/storage/${mainImage}`
                         : "/path/to/placeholder.png";
 
+                products_index_header.innerHTML = `<h2 class="font-extrabold text-2xl text-blue-600 tracking-tight">${element.category?.name}</h2>`;
+
                 view += `
                 <div class="product_card bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
                     <a href="/products/${id}" class="flex-grow">
@@ -155,7 +158,7 @@ function filterCategory (query) {
                     </div>
                 </div>`;
             });
-
+            
             products_index_result.innerHTML = view;
 
             //Geschreven door AI
