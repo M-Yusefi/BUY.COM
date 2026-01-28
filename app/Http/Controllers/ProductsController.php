@@ -26,7 +26,18 @@ class ProductsController extends Controller
 
     public function index_data(Request $request)
     {
+        $userId = Auth::id();
+
         $products = Product::with('vendor', 'category', 'images')->get();
+
+        $alreadyInCart = CartItem::where('user_id', $userId)
+                                 ->pluck('product_id')
+                                 ->toArray();
+
+        $products->map(function ($product) use ($alreadyInCart) {
+            $product->is_in_cart = in_array($product->id, $alreadyInCart);
+            return $product;
+        });
 
         return response()->json([
             'products' => $products

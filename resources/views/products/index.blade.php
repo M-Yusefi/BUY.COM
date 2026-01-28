@@ -1,26 +1,25 @@
 <x-app-layout>
 	<x-slot name="header">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             
-            <div class="flex-shrink-0">
-                <h2 id="product_index_header" class="font-extrabold text-2xl text-blue-600 tracking-tight">
-                    All Products
-                </h2>
-            </div>
+            <h2 id="product_index_header" class="font-extrabold text-2xl text-blue-600 leading-tight">
+                All Products
+            </h2>
 
-            <div class="flex items-center space-x-6">
+            <div class="flex flex-row gap-2 w-full lg:w-auto">
                 
                 {{-- All Products Link --}}
                 <a href="{{ route('products.index') }}" 
-                    class="appearance-none bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
-                    focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none w-full transition-all duration-300 cursor-pointer">
+                    class="flex items-center justify-center bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-full sm:w-auto whitespace-nowrap">
                         All Products 
                 </a>
 
                 {{-- Category Link --}}
-                <select name="category_id" id="index_filter_category" class="appearance-none bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
-                    focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none w-64 transition-all duration-300 cursor-pointer
-                    @error('category_id') border-red-500 ring-red-100 @enderror">
+                <select name="category_id" id="index_filter_category" 
+                    class="appearance-none bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                    focus:ring-4 focus:ring-blue-100 focus:border-blue-500 outline-none w-full transition-all duration-300 cursor-pointer hover:bg-blue-50 hover:border-blue-300
+                    @error('category_id') border-red-500 @enderror">
                     
                     <option value="" disabled selected >Categories</option>
                     <p id="category_id"></p>

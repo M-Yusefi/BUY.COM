@@ -3,31 +3,44 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             
             <div class="flex-shrink-0">
-                <h2 class="font-extrabold text-2xl text-gray-900 leading-tight">
+                <h2 class="font-extrabold text-2xl text-blue-600 tracking-tight">
                     {{ __('Dashboard') }}
                 </h2>
             </div>
+            <div class="flex flex-row gap-2  lg:w-auto">
+                <div class="flex items-center space-x-6">
+                    {{-- All Products Link --}}
+                    <a href="{{ route('products.index') }}" 
+                        class="flex items-center justify-center bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                        hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-full sm:w-auto whitespace-nowrap">
+                            All Products 
+                    </a>            
+                </div>
 
-            <div class="flex items-center space-x-6">
-                
-                {{-- Vendor Link --}}
-                <a href="{{ route('admin.vendor') }}" 
-                class="text-sm font-medium text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out py-2 px-3 rounded-lg hover:bg-gray-50">
-                    Vendors
-                </a>
-                
+                <div class="flex items-center space-x-6">
+                    {{-- Vendor Link --}}
+                    <a href="{{ route('admin.vendor') }}" 
+                        class="flex items-center justify-center bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                        hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-full sm:w-auto whitespace-nowrap">
+                            Vendors 
+                    </a>            
+                </div>
+
+                <div class="flex items-center space-x-6">
                 {{-- Categorie Link --}}
-                <a href="{{ route('categories.categories') }}" 
-                class="text-sm font-medium text-gray-600 hover:text-blue-600 transition duration-150 ease-in-out py-2 px-3 rounded-lg hover:bg-gray-50">
-                    Categories
-                </a>
-
+                    <a href="{{ route('categories.categories') }}" 
+                        class="flex items-center justify-center bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                        hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-full sm:w-auto whitespace-nowrap">
+                        Categories 
+                    </a>            
+                </div>
             </div>
+
         </div>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
             <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
                 <a href="{{ route('admin.vendor') }}" 
                 class="w-full h-full flex flex-col justify-center items-center 

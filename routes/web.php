@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\CartItemController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,9 @@ Route::middleware(['auth', 'verified'])->group(function (){
     // Vendor apply functions
     Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');
     Route::post('/store', [VendorController::class , 'store'])->name('vendor.store');
+
+    // Adding products to the cart 
+    Route::post('/cart/store', [CartItemController::class, 'store'])->name('cart.store');
 });
 
 // Free acces

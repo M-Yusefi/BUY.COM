@@ -1,5 +1,5 @@
 // Container voor de producten van de momenteel ingelogde verkoper (vendor)
-const vendor_index_result = document.getElementById("vendorIndexResult"); 
+const vendor_index_result = document.getElementById("vendorIndexResult");
 
 // De hoofdsectie waar de volledige lijst van alle producten wordt getoond
 const products_index_result = document.getElementById("products_index");
@@ -40,8 +40,8 @@ function vendorIndex() {
 
                 const mainImage = element.images?.[0]?.image_path;
                 const imageHtml = mainImage
-                        ? `<img src="/storage/${mainImage}" class="w-10 h-10 object-cover">` 
-                        : `<div class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded"><i class="fa-solid fa-image text-gray-400"></i></div>`;
+                    ? `<img src="/storage/${mainImage}" class="w-10 h-10 object-cover">`
+                    : `<div class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded"><i class="fa-solid fa-image text-gray-400"></i></div>`;
 
                 view +=
                     `<tr id="product-${id}">\n` +
@@ -104,6 +104,12 @@ function product_index() {
                 const imageHtml = mainImage
                     ? `/storage/${mainImage}`
                     : "/path/to/placeholder.png";
+                
+                let btnColor = element.is_in_cart ? 
+                    "bg-red-600 hover:bg-red-700"    
+                    :"bg-blue-600 hover:bg-blue-700";
+                let btnText = element.is_in_cart ? "In Cart" :"Add to Cart";
+                
 
                 view += `
                 <div class="product_card bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
@@ -124,8 +130,10 @@ function product_index() {
                         </div>
                     </a>
                     <div class="p-5 pt-0 mt-auto">
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-cart-shopping text-sm"></i> Add to Cart
+                        <button 
+                            onclick="addToCart(${id})" 
+                            class="w-full ${btnColor} hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-shopping text-sm"></i> ${btnText}
                         </button>
                     </div>
                 </div>`;
@@ -173,12 +181,63 @@ function product_index() {
 product_index();
 //</>//
 
+// Add to Cart functie
+function addToCart(productId) {
+    if (!productId) return;
+    fetch("/cart/store", {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json",
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        },
+        body: JSON.stringify({ product_id: productId }),
+    })
+        .then((res) => {
+            if (res.status === 401) {
+                window.location.href = "/login";
+                return;
+            }
+            return res.json();
+        })
+        .then((data) => {
+            if (data) {
+                showToast(data.message, data.status);
+
+                const btn = document.querySelector(`button[onclick="addToCart(${productId})"]`);
+                if (btn) {
+                    btn.classList.replace('bg-blue-600', 'bg-green-600');
+                    btn.innerHTML = `<i class="fa-solid fa-check text-sm"></i> In Cart`;
+                }
+
+                if (data.cartCount !== undefined) {
+                    const cartBadge =
+                        document.getElementById("cart-count-badge");
+                    if (cartBadge) cartBadge.innerText = data.cartCount;
+                }
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            showToast("Something went wrong. Please try again.", "error");
+        });
+}
+// Expose `addToCart` to the global scope so inline `onclick` attributes work
+// (bundlers like Vite/module scope prevent functions from being global by default)
+window.addToCart = addToCart;
+//</>//
+
 // Search Functie
 function search(query) {
     fetch(search_url + "?query=" + query)
-        .then(result => result.json())
-        .then(data => {
-            if (data.status === "success" && data.products && data.products.length > 0) { 
+        .then((result) => result.json())
+        .then((data) => {
+            if (
+                data.status === "success" &&
+                data.products &&
+                data.products.length > 0
+            ) {
                 let view = `
                     <table class="min-w-full text-left">
                         <thead class="bg-gray-50 border-b">
@@ -189,11 +248,11 @@ function search(query) {
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">`;
-                
+
                 data.products.forEach((product) => {
                     const mainImage = product.images?.[0]?.image_path;
-                    const imageHtml = mainImage 
-                        ? `<img src="/storage/${mainImage}" class="w-10 h-10 object-cover rounded shadow-sm">` 
+                    const imageHtml = mainImage
+                        ? `<img src="/storage/${mainImage}" class="w-10 h-10 object-cover rounded shadow-sm">`
                         : `<div class="w-10 h-10 bg-gray-200 flex items-center justify-center rounded"><i class="fa-solid fa-image text-gray-400"></i></div>`;
 
                     view += `
@@ -206,17 +265,35 @@ function search(query) {
 
                 view += "</tbody></table>";
                 result_container.innerHTML = view;
-                result_container.classList.remove('hidden');
+                result_container.classList.remove("hidden");
             } else {
                 // Geen resultaten gevonden
-                result_container.innerHTML = '<p class="p-4 text-gray-500">No products found</p>';
-                result_container.classList.remove('hidden');
+                result_container.innerHTML =
+                    '<p class="p-4 text-gray-500">No products found</p>';
+                result_container.classList.remove("hidden");
             }
         })
-        .catch(error => {
+        .catch((error) => {
             console.error("Search error:", error);
-            result_container.innerHTML = '<p class="p-4 text-red-500">Something went wrong on our end. Please try again in a moment.</p>';
-            result_container.classList.add('hidden');
+            result_container.innerHTML =
+                '<p class="p-4 text-red-500">Something went wrong on our end. Please try again in a moment.</p>';
+            result_container.classList.add("hidden");
         });
+}
+//</>//
+
+
+// Custom alert function
+function showToast(message, status = 'success') {
+    Swal.fire({
+        icon: status,
+        title: status.charAt(0).toUpperCase() + status.slice(1) + '!',
+        text: message,
+        toast: true,
+        position: 'top',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true
+    });
 }
 //</>//

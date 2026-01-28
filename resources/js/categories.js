@@ -4,10 +4,6 @@ const products_index_result = document.getElementById("products_index");
 const index_filter_category = document.getElementById("index_filter_category");
 const products_index_header = document.getElementById("product_index_header");
 
-index_filter_category.addEventListener('change' , () => {
-    filterCategory(index_filter_category.value);
-}); 
-
 
 // Functie om Categorie opties genereren voor de select velden
 function generateCatOptions() {
@@ -107,6 +103,9 @@ function indexCategories() {
 indexCategories();
 //</>//
 
+index_filter_category.addEventListener('change' , () => {
+    filterCategory(index_filter_category.value);
+}); 
 
 function filterCategory (query) {
     if (!products_index_result) return;
