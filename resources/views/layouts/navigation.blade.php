@@ -15,7 +15,7 @@
                         <input 
                             type="text" 
                             id="searchInput" 
-                            placeholder="Search for products, e.g. iPhone 17..." 
+                            placeholder="Search for products" 
                             value="{{ $query ?? '' }}" 
                             class="w-full h-12 text-lg px-6 bg-gray-100 border-2 border-transparent rounded-l-full focus:bg-white focus:border-blue-600 focus:ring-0 outline-none transition-all text-gray-700"
                         >
@@ -41,15 +41,28 @@
                                 {{ __('Dashboard') }}
                             </x-nav-link>
 
+                            <x-nav-link :href="route('checkout.index')" :active="request()->routeIs('checkout.index')">
+                                <i class="fa-solid fa-cart-arrow-down text-xl"></i>
+                            </x-nav-link>
+
                         @elseif (Auth::user()->role === 'vendor')
                             <x-nav-link :href="route('vendor.dashboard')" :active="request()->routeIs('vendor.dashboard')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
 
+                            <x-nav-link :href="route('checkout.index')" :active="request()->routeIs('checkout.index')">
+                                <i class="fa-solid fa-cart-arrow-down text-xl"></i>
+                            </x-nav-link>
                         @else
                             <x-nav-link :href="route('dashboard.index')" :active="request()->routeIs('dashboard.index')">
                                 {{ __('Dashboard') }}
                             </x-nav-link>
+                        
+                            <x-nav-link :href="route('checkout.index')" :active="request()->routeIs('checkout.index')">
+                                <i class="fa-solid fa-cart-arrow-down text-xl"></i>
+                                <p class="pl-2 text-xl font-semibold "id="cart-count-badge"></p>
+                            </x-nav-link>
+
                         @endif
                     @else 
                         <x-nav-link :href="route('login')" :active="request()->routeIs('login')">

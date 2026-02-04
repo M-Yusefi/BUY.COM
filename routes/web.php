@@ -75,17 +75,23 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');
     Route::post('/store', [VendorController::class , 'store'])->name('vendor.store');
 
+    // Route to cart page
+    Route::get('/checkout/index', [CartItemController::class, 'index'])->name('checkout.index');
+
     // Adding products to the cart 
     Route::post('/cart/store', [CartItemController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{product}', [CartItemController::class, 'delete'])->name('cart.delete');
+    Route::patch('/cart/update/{cartItem}', [CartItemController::class, 'update'])->name('cart.update');
 });
 
 // Free acces
 Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->name('categories.allCategories');
+Route::get('/categories/filter' , [CategoriesController::class, 'filter'])->name('categories.filter');
 Route::get('/products/index', [ProductsController::class, 'index'])->name('products.index');
 Route::get('/products/index_data', [ProductsController::class, 'index_data'])->name('products.index_data');
-Route::get('/categories/filter' , [CategoriesController::class, 'filter'])->name('categories.filter');
-Route::get('/products/search' , [ProductsController::class, 'search'])->name('products.search');
 Route::get('/products/{product}', [ProductsController::class, 'show'])->name('products.show');
+Route::get('/products/search' , [ProductsController::class, 'search'])->name('products.search');
+
 
 
 

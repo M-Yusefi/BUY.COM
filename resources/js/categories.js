@@ -4,6 +4,11 @@ const products_index_result = document.getElementById("products_index");
 const index_filter_category = document.getElementById("index_filter_category");
 const products_index_header = document.getElementById("product_index_header");
 
+if (index_filter_category) {
+    index_filter_category.addEventListener('change' , () => {
+        filterCategory(index_filter_category.value);
+    }); 
+}
 
 // Functie om Categorie opties genereren voor de select velden
 function generateCatOptions() {
@@ -103,9 +108,6 @@ function indexCategories() {
 indexCategories();
 //</>//
 
-index_filter_category.addEventListener('change' , () => {
-    filterCategory(index_filter_category.value);
-}); 
 
 function filterCategory (query) {
     if (!products_index_result) return;
@@ -130,12 +132,17 @@ function filterCategory (query) {
                         ? `/storage/${mainImage}`
                         : "/path/to/placeholder.png";
 
+                let btnColor = element.is_in_cart ? 
+                    "bg-red-600 hover:bg-red-700"    
+                    :"bg-blue-600 hover:bg-blue-700";
+                let btnText = element.is_in_cart ? "In Cart" :"Add to Cart";
+
                 products_index_header.innerHTML = `<h2 class="font-extrabold text-2xl text-blue-600 tracking-tight">${element.category?.name}</h2>`;
 
                 view += `
                 <div class="product_card bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
                     <a href="/products/${id}" class="flex-grow">
-                        <div class="relative bg-gray-50 overflow-hidden aspect-[5/4]">
+                        <div class="relative w-full h-48 overflow-hidden rounded-t-lg bg-gray-100">
                             <img id="img_${id}" 
                             src="${firstImage}" 
                             alt="${element.name}" 
@@ -151,8 +158,10 @@ function filterCategory (query) {
                         </div>
                     </a>
                     <div class="p-5 pt-0 mt-auto">
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-cart-shopping text-sm"></i> Add to Cart
+                        <button 
+                            onclick="addToCart(${id})" 
+                            class="w-full ${btnColor} hover:opacity-90 text-white font-bold py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-shopping text-sm"></i> ${btnText}
                         </button>
                     </div>
                 </div>`;

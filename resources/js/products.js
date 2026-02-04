@@ -112,13 +112,13 @@ function product_index() {
                 
 
                 view += `
-                <div class="product_card bg-white shadow-md rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
+                <div class="product_card bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100 flex flex-col hover:shadow-xl transition-shadow duration-300">
                     <a href="/products/${id}" class="flex-grow">
-                        <div class="relative w-full h-48 overflow-hidden rounded-t-lg bg-gray-100">
+                        <div class="relative w-full h-80 overflow-hidden rounded-t-lg bg-gray-100">
                             <img id="img_${id}" 
                             src="${imageHtml}" 
                             alt="${element.name}" 
-                            class="w-full h-48 object-cover transition-opacity duration-500 opacity-100">
+                            class="w-full h-full object-cover transition-opacity duration-500 opacity-100">
                         </div>
                         <div class="p-5">
                             <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">${element.category?.name || "General"}</span>
@@ -182,51 +182,6 @@ product_index();
 //</>//
 
 // Add to Cart functie
-function addToCart(productId) {
-    if (!productId) return;
-    fetch("/cart/store", {
-        method: "POST",
-        headers: {
-            "Content-type": "application/json",
-            "X-CSRF-TOKEN": document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content"),
-        },
-        body: JSON.stringify({ product_id: productId }),
-    })
-        .then((res) => {
-            if (res.status === 401) {
-                window.location.href = "/login";
-                return;
-            }
-            return res.json();
-        })
-        .then((data) => {
-            if (data) {
-                showToast(data.message, data.status);
-
-                const btn = document.querySelector(`button[onclick="addToCart(${productId})"]`);
-                if (btn) {
-                    btn.classList.replace('bg-blue-600', 'bg-green-600');
-                    btn.innerHTML = `<i class="fa-solid fa-check text-sm"></i> In Cart`;
-                }
-
-                if (data.cartCount !== undefined) {
-                    const cartBadge =
-                        document.getElementById("cart-count-badge");
-                    if (cartBadge) cartBadge.innerText = data.cartCount;
-                }
-            }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-            showToast("Something went wrong. Please try again.", "error");
-        });
-}
-// Expose `addToCart` to the global scope so inline `onclick` attributes work
-// (bundlers like Vite/module scope prevent functions from being global by default)
-window.addToCart = addToCart;
-//</>//
 
 // Search Functie
 function search(query) {
@@ -282,9 +237,8 @@ function search(query) {
 }
 //</>//
 
-
 // Custom alert function
-function showToast(message, status = 'success') {
+export function showToast(message, status = 'success') {
     Swal.fire({
         icon: status,
         title: status.charAt(0).toUpperCase() + status.slice(1) + '!',

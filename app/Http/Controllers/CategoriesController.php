@@ -73,6 +73,15 @@ class CategoriesController extends Controller
                     ->where('category_id', 'LIKE', '%' . $query . '%')
                     ->get();
 
+                $alreadyInCart = CartItem::where('user_id', Auth::id())
+                                        ->pluck('product_id')
+                                        ->toArray();
+
+                $products->map(function ($product) use ($alreadyInCart) {
+                    $product->is_in_cart = in_array($product->id, $alreadyInCart);
+                    return $product;
+                });
+
                 return response()->json([
                     'status'   => 'success',
                     'products' => $products,
@@ -82,20 +91,5 @@ class CategoriesController extends Controller
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
             }
         } 
-    }
-
-    public function edit(string $id)
-    {
-        //
-    }
-
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    public function destroy(string $id)
-    {
-        //
     }
 }
