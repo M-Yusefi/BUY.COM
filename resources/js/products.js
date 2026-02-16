@@ -120,7 +120,7 @@ function product_index() {
                             alt="${element.name}" 
                             class="w-full h-full object-cover transition-opacity duration-500 opacity-100">
                         </div>
-                        <div class="p-5">
+                        <div class="p-4">
                             <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest">${element.category?.name || "General"}</span>
                             <h1 class="text-gray-800 font-semibold text-lg line-clamp-2 mt-1 mb-2 h-14">${element.name}</h1>
                             <p class="text-sm text-gray-500 italic mb-4">By ${vendor}</p>

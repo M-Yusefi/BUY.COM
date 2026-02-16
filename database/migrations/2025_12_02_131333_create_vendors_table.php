@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('shop_name');
             $table->text('bio')->nullable();
             $table->string('stripe_account_id')->nullable();
-            $table->enum('status', ['pending','active','blocked'])->default('pending');
+            $table->string('status')->default('pending');
             $table->timestamps();        
         });
     }

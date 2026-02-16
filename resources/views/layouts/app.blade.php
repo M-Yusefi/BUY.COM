@@ -19,9 +19,9 @@
         <!-- Scripts -->
         @vite([
             'resources/css/app.css', 
-            'resources/js/app.js', 
-            'resources/js/categories.js',
+            'resources/js/app.js',
             'resources/js/products.js',
+            'resources/js/categories.js',
             'resources/js/cart.js'
         ])
     </head>

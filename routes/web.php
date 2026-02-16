@@ -9,6 +9,7 @@ use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\CartItemController;
+use App\Http\Controllers\AddressController;
 use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -75,13 +76,17 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');
     Route::post('/store', [VendorController::class , 'store'])->name('vendor.store');
 
-    // Route to cart page
-    Route::get('/checkout/index', [CartItemController::class, 'index'])->name('checkout.index');
-
     // Adding products to the cart 
     Route::post('/cart/store', [CartItemController::class, 'store'])->name('cart.store');
     Route::delete('/cart/{product}', [CartItemController::class, 'delete'])->name('cart.delete');
     Route::patch('/cart/update/{cartItem}', [CartItemController::class, 'update'])->name('cart.update');
+
+    // Route to cart page
+    Route::get('/checkout/index', [CartItemController::class, 'index'])->name('checkout.index');
+    Route::get('/checkout/addresses', [AddressController::class, 'index'])->name('checkout.address');
+    Route::post('/checkout/set-address', [AddressController::class, 'setAddress'])->name('checkout.setAddress');
+    Route::get('/address/create', [AddressController::class, 'create'])->name('address.create');
+    Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
 });
 
 // Free acces

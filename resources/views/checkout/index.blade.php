@@ -41,7 +41,7 @@
                                 <div class="flex items-center bg-white rounded-xl border border-gray-200 shadow-sm hover:border-blue-300 transition-all gap-8">
                                     
                                     <div class="w-48 h-48 flex-shrink-0">
-                                        <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" 
+                                        <img src="{{ asset('storage/' . ($item->product->images->first())->image_path ?? 'placeholder.png') }}" 
                                             alt="{{ $product->name }}" 
                                             class="w-full h-full object-cover rounded-tl-xl rounded-bl-xl">
                                     </div>
@@ -91,9 +91,11 @@
                                     </div>
                                 </div>
 
-                                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95">
-                                    Proceed to Payment
-                                </button>
+                                <a href="{{ route('checkout.address') }}">
+                                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95">
+                                        Proceed the Order
+                                    </button>
+                                </a>
                                 
                                 <p class="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-lock"></i> Secure Checkout

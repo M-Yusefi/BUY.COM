@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Category;
 use App\Models\CartItem;
+use App\Models\UserAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;

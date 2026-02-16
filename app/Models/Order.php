@@ -29,4 +29,9 @@ class Order extends Model
     {
         return $this->hasManyThrough(Product::class, OrderItem::class, 'order_id', 'id', 'id', 'product_id');
     }
+
+    public function address() {
+        return $this->belongsTo(UserAddress::class, 'user_address_id');
+    }
+
 }
