@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\CartItem;
+use App\Models\UserAddress;
 
 class CartItemController extends Controller
 {
-    public function index()
+    public function cart()
     {
         $userId = Auth::id();
 
@@ -23,9 +24,8 @@ class CartItemController extends Controller
         });
 
 
-        return view('checkout.index', compact('cartItems', 'total'));
+        return view('checkout.cart', compact('cartItems', 'total'));
     }    
-
 
     public function store(Request $request)
     {
@@ -78,7 +78,6 @@ class CartItemController extends Controller
         }    
     }
 
-
     public function update(Request $request, CartItem $cartItem)
     {
         $user = Auth::user();
@@ -98,6 +97,34 @@ class CartItemController extends Controller
         return response()->json([
             'status' => 'success',
             'newTotal' => number_format($newTotal, 2, '.', ',')
+        ]);
+    }
+
+    public function review() {
+        $user = Auth::user();
+        $addressId = session('selected_address_id');
+
+        $address = UserAddress::where('id', $addressId)
+                              ->where('user_id', $user->id)
+                              ->first();
+
+        if (!$address) {
+            return redirect()->route('checkout.address')->with('error', 'please select an address first.');
+        }
+
+        $cartItems = CartItem::where('user_id', $user->id)
+                             ->with('product.vendor','product.category','product.images')
+                             ->get();
+
+        $total = $cartItems->sum(function($item) {
+            return ($item->product?->price ?? 0) * $item->quantity;
+        });
+
+        return view('checkout.review', [
+            'cartItems' => $cartItems,
+            'total' => $total,
+            'address' => $address,
+            'email' => $user->email
         ]);
     }
 

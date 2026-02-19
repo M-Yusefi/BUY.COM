@@ -5,73 +5,76 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Vendor;
-use App\Models\Product;
-use App\Models\ProductImage;
-use App\Models\Category;
-use App\Models\CartItem;
-use App\Models\UserAddress;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\Transaction;
-use App\Models\Review;
 
 class OrdersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+        $cartItems = $user->cartItems()->with('product')->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->back()->with('error', 'Your Cart is empty');
+        }
+
+        $total = $cartItems->sum(function($item) {
+            return $item->product->price * $item->quantity;
+        });
+
+        $order = $user->orders()->create([
+            'user_id' => $user->id,
+            'user_address_id' => session('selected_address_id'),
+            'total_price' => $total,
+            'status' => 'pending'
+        ]);
+
+        foreach ($cartItems as $item) {
+            $order->items()->create([
+                'product_id' => $item->product_id,
+                'vendor_id' => $item->product->vendor_id,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price
+            ]);
+
+            $item->product->decrement('stock', $item->quantity);
+        }
+
+        $user->cartItems()->delete();
+
+        return redirect()->route('order.success', $order)->with('success', 'Order placed successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function success(Order $order) 
     {
-        //
+
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $order->load('items.product', 'address');
+
+        return view('orders.success', compact('order'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function index()
     {
-        //
+        $orders = auth()->user()->orders()
+                ->with('address') 
+                ->latest()        
+                ->get();
+
+        return view('orders.index', compact('orders'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show(Order $order) 
     {
-        //
-    }
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $order->load('items.product', 'address');
+
+        return view('orders.show', compact('order'));
     }
 }

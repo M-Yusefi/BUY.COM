@@ -28,9 +28,10 @@ class AddressController extends Controller
             'phone_number' => 'nullable|string',
         ]);
         
-        $validated['is_default'] = false;
+        $validated['is_default'] = Auth::user()->addresses()->count() === 0;
 
-        Auth::user()->addresses->create($validated);
+        Auth::user()->addresses()->create($validated);
+
         return redirect()->route('checkout.address');
     }
 
@@ -42,6 +43,6 @@ class AddressController extends Controller
 
         session(['selected_address_id' => $request->selected_address]);
         
-        return redirect()->route('checkout.index');
+        return redirect()->route('checkout.review');
     }
 }

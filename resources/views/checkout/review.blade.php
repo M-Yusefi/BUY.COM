@@ -1,0 +1,146 @@
+<x-app-layout>
+	<x-slot name="header">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            
+            <div class="flex-shrink-0">
+                <h2 class="font-extrabold text-2xl text-blue-600 tracking-tight">
+                    Your Order Overview 
+                </h2>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                {{-- All Products Link --}}
+                <a href="{{ route('products.index') }}" 
+                    class="flex items-center justify-center bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                    hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-full sm:w-auto whitespace-nowrap">
+                        All Products 
+                </a>            
+            </div>
+        </div>
+    </x-slot>
+
+	<div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-md rounded-2xl">
+                @if ($cartItems->isEmpty())
+                    <div class="text-center py-10 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 p-6">
+                        <p class="text-gray-600 text-3xl font-medium mb-6">No products to be found <i class="fa-solid fa-wind"></i></p>
+                        <a href="{{ route('products.index') }}" class="text-xl underline text-blue-600 hover:text-blue-800">Aad product to your Cart <i class="fa-solid fa-cart-arrow-down text-xl"></i></a>
+                    </div>
+                @else
+                    <div class="mb-4 p-2 bg-blue-600">
+                        <h1 class="font-bold text-2xl text-white p-3">
+                            <span class="text-blue-300">{{ count($cartItems) }}</span> Items in Cart
+                        </h1>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
+                        <div class="lg:col-span-2 space-y-4">
+                            @foreach ($cartItems as $item)
+                                @php $product = $item->product; @endphp
+                                <div class="flex items-center bg-white rounded-xl border border-gray-200 shadow-md hover:border-blue-300 transition-all gap-8">
+                                    
+                                    <div class="w-48 h-48 flex-shrink-0">
+                                        <img src="{{ asset('storage/' . ($item->product->images->first())->image_path ?? 'placeholder.png') }}" 
+                                            alt="{{ $product->name }}" 
+                                            class="w-full h-full object-cover rounded-tl-xl rounded-bl-xl">
+                                    </div>
+
+                                    <div class="flex-grow">
+                                        <h3 class="font-bold text-gray-800 text-lg">{{ $product->name }}</h3>
+                                        <p class="text-sm text-gray-500 italic">Sold by: {{ $product->vendor->shop_name ?? 'Unknown' }}</p>
+                                        <div class="flex items-center mt-3 gap-3">
+                                            <button onclick="updateQty({{ $item->id }}, -1)" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">-</button>
+                                            <span class="font-semibold" id="qty-{{ $item->id }}">{{ $item->quantity }}</span>
+                                            <button onclick="updateQty({{ $item->id }}, 1)" class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100">+</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-right flex flex-col justify-between h-24 pr-8">
+                                        <p class="font-extrabold text-blue-600 text-xl">€{{ number_format($product->price * $item->quantity, 2) }}</p>
+                                        <p class="text-gray-600">€{{ number_format($product->price, 2) }}</p>
+                                        <form action="{{ route('cart.delete',  $product->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" class="text-red-500 hover:scale-110 transition-transform">
+                                                <i class="fa-solid fa-trash"></i> Remove
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="lg:col-span-1">
+                            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-md sticky top-6">
+                                <h2 class="text-xl font-bold mb-4 border-b pb-4 text-gray-800">Order Summary</h2>
+                                
+                                <div class="space-y-3 mb-6">
+                                    <div class="flex justify-between text-gray-600">
+                                        <span>Subtotal</span>
+                                        <span class="total-price">€{{ number_format($total, 2) }}</span>
+                                    </div>
+                                    <div class="flex justify-between text-gray-600">
+                                        <span>Shipping</span>
+                                        <span class="text-green-600 font-medium">FREE</span>
+                                    </div>
+                                    <div class="flex justify-between text-xl font-black text-gray-900 border-t pt-4">
+                                        <span>Total</span>
+                                        <span class="total-price">€{{ number_format($total, 2) }}</span>
+                                    </div>
+                                </div>
+                                <form action="{{ route('order.store') }}" method="POST">
+                                    @csrf
+                                    
+                                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform active:scale-95">
+                                        Proceed to Payment
+                                    </button>
+                                </form>
+                                
+                                <p class="text-center text-xs text-gray-400 mt-4 flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-lock"></i> Secure Checkout
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="lg:col-span-2 space-y-4">
+                            <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-md">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-lg font-bold text-gray-800 flex items-center">
+                                        <i class="fa-solid fa-truck-fast mr-2"></i>
+                                        Shipping Address
+                                    </h2>
+                                    <a href="{{ route('checkout.address') }}" class="text-sm text-blue-600 hover:underline font-medium">
+                                        Change address
+                                    </a>
+                                </div>
+
+                                <div class="grid grid-cols-1 gap-6 bg-gray-50 rounded-xl p-5 border border-gray-100">
+                                    <div class="space-y-1">
+                                        <p class="text-sm font-bold text-gray-900 text-lg">{{ $address->full_name }}</p>
+                                        <p class="text-gray-600">{{ $address->address_line_1 }}</p>
+                                        <p class="text-gray-600">{{ $address->postal_code }} {{ $address->city }}</p>
+                                        <p class="text-gray-500 font-medium uppercase text-xs tracking-widest mt-2">{{ $address->country }}</p>
+                                    </div>
+
+                                    <div class="flex flex-col justify-center border-t md:border-t-0 md:border-l border-gray-200 pt-4 md:pt-0 md:pl-6">
+                                        <p class="text-xs uppercase text-gray-400 font-bold mb-2">Contact details</p>
+                                        <p class="text-gray-700 flex items-center">
+                                            <i class="fa-solid fa-phone mr-2"></i>                                            
+                                            {{ $address->phone_number ?? 'No phone number provided' }}
+                                        </p>
+                                        <p class="text-gray-700 flex items-center mt-1">
+                                            <i class="fa-solid fa-at mr-2"></i>
+                                            {{ $email }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>               
+                @endif
+            </div>
+        </div>
+    </div>
+</x-app-layout>

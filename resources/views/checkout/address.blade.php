@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="flex items-center space-x-6">
-                    <a href="{{ route('checkout.index') }}" 
+                    <a href="{{ route('checkout.cart') }}" 
                         class="flex items-center justify-centerbg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
                         hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-68 sm:w-auto whitespace-nowrap">
                             <i class="fa-solid fa-arrow-left mr-2"></i>                
@@ -37,7 +37,7 @@
                         Your Addresses
                     </h1>
 
-                    <div class="h-full p-4 flex flex-col"> {{-- 1 & 2: Volledige hoogte en flex --}}
+                    <div class="h-full p-4 flex flex-col">
                         @if ($addresses->isEmpty())
                             <div class="text-center py-10 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 p-6">
                                 <p class="text-gray-600 text-lg font-medium">You have no registered addresses yet.</p>

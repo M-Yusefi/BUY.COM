@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="flex items-center space-x-6">
-                    <a href="{{ route('checkout.index') }}" 
+                    <a href="{{ route('checkout.cart') }}" 
                         class="flex items-center justify-centerbg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
                         hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-68 sm:w-auto whitespace-nowrap">
                             <i class="fa-solid fa-arrow-left mr-2"></i>                
@@ -79,21 +79,21 @@
                             <label for="country" class="mb-2 font-medium text-lg text-gray-700">Country <span class="text-red-500">*</span></label>
                             <select name="country" id="country" 
                                 class="border rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 w-full @error('country') border-red-500 bg-red-100 @enderror">
-                                <option value="" disabled {{ old('country') ? '' : 'selected' }}>Select Your Country</option>
+                                <option value="" disabled>Select Your Country</option>
                                 
-                                <option value="Netherlands" {{ old('country') == 'Netherlands' ? 'selected' : '' }}>
+                                <option value="Netherlands">
                                     Netherlands
                                 </option>
                                 
-                                <option value="Belgium" {{ old('country') == 'Belgium' ? 'selected' : '' }}>
+                                <option value="Belgium">
                                     Belgium
                                 </option>
                                 
-                                <option value="Germany" {{ old('country') == 'Germany' ? 'selected' : '' }}>
+                                <option value="Germany">
                                     Germany
                                 </option>
                                 
-                                <option value="France" {{ old('country') == 'France' ? 'selected' : '' }}>
+                                <option value="France">
                                     France
                                 </option>
                             </select>

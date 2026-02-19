@@ -6,25 +6,55 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
-use App\Http\Controllers\ReviewsController;
-use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\AddressController;
-use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+// Free acces
+Route::get('/', function () {return view('home');})->name('home');
+Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->name('categories.allCategories');
+Route::get('/categories/filter' , [CategoriesController::class, 'filter'])->name('categories.filter');
+Route::get('/products/index', [ProductsController::class, 'index'])->name('products.index');
+Route::get('/products/index_data', [ProductsController::class, 'index_data'])->name('products.index_data');
+Route::get('/products/{product}', [ProductsController::class, 'show'])->name('products.show');
+Route::get('/products/search' , [ProductsController::class, 'search'])->name('products.search');
 
 
-Route::middleware('auth')->group(function () {
-    
+// Defult Route -> login required
+Route::middleware(['auth', 'verified'])->group(function (){  
+    // Profile RUD  
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Customer dash
+    Route::get('/dashboard', function () { return view('dashboard.index');})->name('dashboard.index');
+    
+    // Vendor apply functions
+    Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');
+    Route::post('/store', [VendorController::class , 'store'])->name('vendor.store');
+
+    // Adding products to the cart 
+    Route::post('/cart/store', [CartItemController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{product}', [CartItemController::class, 'delete'])->name('cart.delete');
+    Route::patch('/cart/update/{cartItem}', [CartItemController::class, 'update'])->name('cart.update');
+    Route::get('/checkout/cart', [CartItemController::class, 'cart'])->name('checkout.cart');
+   
+    // Address CRUD 
+    Route::get('/checkout/addresses', [AddressController::class, 'index'])->name('checkout.address');
+    Route::post('/checkout/set-address', [AddressController::class, 'setAddress'])->name('checkout.setAddress');
+    Route::get('/address/create', [AddressController::class, 'create'])->name('address.create');
+    Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
+
+    // Final checkout
+    Route::get('/checkout/review', [CartItemController::class, 'review'])->name('checkout.review');
+    Route::post('/order/store', [OrdersController::class, 'store'])->name('order.store');
+    Route::get('/order/success/{order}', [OrdersController::class, 'success'])->name('order.success');
+
+    Route::get('/orders/index', [OrdersController::class, 'index'])->name('order.index');
+    Route::get('/orders/show/{order}', [OrdersController::class, 'show'])->name('order.show');
 });
-require __DIR__.'/auth.php';
+
 
 // Admin Route
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function (){
@@ -61,41 +91,13 @@ Route::middleware(['auth', 'role:vendor'])->prefix('products')->name('products.'
     Route::get('/{product}/edit', [ProductsController::class, 'edit'])->name('edit');
     Route::put('/{product}', [ProductsController::class, 'update'])->name('update');
     Route::delete('/{product}', [ProductsController::class, 'destroy'])->name('destroy');
-
-    // AJAX/data endpoint for products JSON
     Route::get('/data', [ProductsController::class, 'data'])->name('data');
 });
 
+require __DIR__.'/auth.php';
 
-// Defult Route -> login required
-Route::middleware(['auth', 'verified'])->group(function (){
-    // Customer dash
-    Route::get('/dashboard', function () { return view('dashboard.index');})->name('dashboard.index');
-    
-    // Vendor apply functions
-    Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');
-    Route::post('/store', [VendorController::class , 'store'])->name('vendor.store');
 
-    // Adding products to the cart 
-    Route::post('/cart/store', [CartItemController::class, 'store'])->name('cart.store');
-    Route::delete('/cart/{product}', [CartItemController::class, 'delete'])->name('cart.delete');
-    Route::patch('/cart/update/{cartItem}', [CartItemController::class, 'update'])->name('cart.update');
 
-    // Route to cart page
-    Route::get('/checkout/index', [CartItemController::class, 'index'])->name('checkout.index');
-    Route::get('/checkout/addresses', [AddressController::class, 'index'])->name('checkout.address');
-    Route::post('/checkout/set-address', [AddressController::class, 'setAddress'])->name('checkout.setAddress');
-    Route::get('/address/create', [AddressController::class, 'create'])->name('address.create');
-    Route::post('/address/store', [AddressController::class, 'store'])->name('address.store');
-});
-
-// Free acces
-Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->name('categories.allCategories');
-Route::get('/categories/filter' , [CategoriesController::class, 'filter'])->name('categories.filter');
-Route::get('/products/index', [ProductsController::class, 'index'])->name('products.index');
-Route::get('/products/index_data', [ProductsController::class, 'index_data'])->name('products.index_data');
-Route::get('/products/{product}', [ProductsController::class, 'show'])->name('products.show');
-Route::get('/products/search' , [ProductsController::class, 'search'])->name('products.search');
 
 
 

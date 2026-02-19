@@ -41,7 +41,7 @@
                                 {{ __('Dashboard') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('checkout.index')" :active="request()->routeIs('checkout.index')">
+                            <x-nav-link :href="route('checkout.cart')" :active="request()->routeIs('checkout.cart')">
                                 <i class="fa-solid fa-cart-arrow-down text-xl"></i>
                             </x-nav-link>
 
@@ -50,7 +50,7 @@
                                 {{ __('Dashboard') }}
                             </x-nav-link>
 
-                            <x-nav-link :href="route('checkout.index')" :active="request()->routeIs('checkout.index')">
+                            <x-nav-link :href="route('checkout.cart')" :active="request()->routeIs('checkout.cart')">
                                 <i class="fa-solid fa-cart-arrow-down text-xl"></i>
                             </x-nav-link>
                         @else
@@ -58,7 +58,7 @@
                                 {{ __('Dashboard') }}
                             </x-nav-link>
                         
-                            <x-nav-link :href="route('checkout.index')" :active="request()->routeIs('checkout.index')">
+                            <x-nav-link :href="route('checkout.cart')" :active="request()->routeIs('checkout.cart')">
                                 <i class="fa-solid fa-cart-arrow-down text-xl"></i>
                                 <p class="pl-2 text-xl font-semibold "id="cart-count-badge"></p>
                             </x-nav-link>
