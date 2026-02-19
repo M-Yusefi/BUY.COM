@@ -21,14 +21,14 @@
 
 	<div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-md rounded-2xl">
                 @if ($cartItems->isEmpty())
                     <div class="text-center py-10 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 p-6">
                         <p class="text-gray-600 text-3xl font-medium mb-6">No products to be found <i class="fa-solid fa-wind"></i></p>
                         <a href="{{ route('products.index') }}" class="text-xl underline text-blue-600 hover:text-blue-800">Aad product to your Cart <i class="fa-solid fa-cart-arrow-down text-xl"></i></a>
                     </div>
                 @else
-                    <div class="mb-8 p-4 bg-blue-600 rounded-xl flex items-center shadow-lg">
+                    <div class="mb-8 p-4 bg-blue-600 flex items-center shadow-lg">
                         {{-- Item Count: Stays on the left --}}
                         <div class="flex-none">
                             <h1 class="font-bold text-xl text-white px-3">

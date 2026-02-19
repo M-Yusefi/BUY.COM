@@ -28,11 +28,51 @@
                         <a href="{{ route('products.index') }}" class="text-xl underline text-blue-600 hover:text-blue-800">Aad product to your Cart <i class="fa-solid fa-cart-arrow-down text-xl"></i></a>
                     </div>
                 @else
-                    <div class="mb-4 p-2 bg-blue-600">
-                        <h1 class="font-bold text-2xl text-white p-3">
-                            <span class="text-blue-300">{{ count($cartItems) }}</span> Items in Cart
-                        </h1>
-                    </div>
+                    <div class="mb-8 p-4 bg-blue-600 flex items-center shadow-lg">
+                        {{-- Item Count: Stays on the left --}}
+                        <div class="flex-none">
+                            <h1 class="font-bold text-xl text-white px-3">
+                                <span class="text-blue-200">{{ count($cartItems) }}</span> Items in Cart
+                            </h1>
+                        </div>
+
+                        {{-- Stepper Navigation: Centered in the remaining space --}}
+                        <div class="flex-grow flex justify-center items-center text-m font-bold">
+                            <div class="flex items-center">
+                                {{-- Step 1: Cart --}}
+                                <a href="{{ route('checkout.cart') }}" 
+                                class="{{ request()->routeIs('checkout.cart') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
+                                    Cart
+                                </a>
+
+                                <i class="fa-solid fa-arrow-right-long text-blue-300 px-2"></i>    
+                                {{-- Step 2: Address --}}
+                                <a href="{{ route('checkout.address') }}" 
+                                class="{{ request()->routeIs('checkout.address') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
+                                    Address
+                                </a>
+
+                                <i class="fa-solid fa-arrow-right-long text-blue-300 px-2"></i>    
+
+                                {{-- Step 3: Overview --}}
+                                <a href="{{ route('checkout.review') }}" 
+                                class="{{ request()->routeIs('checkout.review') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
+                                    Overview
+                                </a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <a href="{{ route('products.index') }}" 
+                                class="flex items-center justify-center bg-white border-2 border-blue-100 rounded-xl px-5 py-2.5 shadow-sm text-gray-700 font-medium 
+                                hover:bg-blue-50 hover:border-blue-300 focus:ring-4 focus:ring-blue-100 outline-none transition-all duration-300 w-full sm:w-auto whitespace-nowrap">
+                                    Add more product
+                            </a>            
+                        </div>
+
+                        {{-- Invisible Spacer: This ensures the center is actually the center of the bar --}}
+                        <div class="flex-none w-[150px] hidden md:block"></div>
+                    </div>                    
 
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4">
                         <div class="lg:col-span-2 space-y-4">
