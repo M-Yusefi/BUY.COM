@@ -20,12 +20,63 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            <div class="shadow-xl rounded-4xl h-80 w-full sm:w-auto">
+                <a href="{{ route('order.index') }}" 
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-2xl 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
+
+                    <div class="p-4 text-center">
+                        <p class="text-4xl font-extrabold tracking-tight">
+                            {{ __('Orders') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-6">
+                            {{ count($orders) }}
+                        </p>
+                    </div>
+                </a>
+            </div>    
+
+            <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
+                <div  
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-2xl 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
+
+                    <div class="p-4 text-center">
+                        <p class="text-4xl font-extrabold tracking-tight">
+                            {{ __('Total Purchased Items') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-6">
+                            {{ $totalItems }}
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
+            
+            <div class="shadow-xl rounded-lg h-80 w-full sm:w-auto">
+                <div
+                class="w-full h-full flex flex-col justify-center items-center 
+                        bg-blue-500 text-white rounded-2xl 
+                        hover:bg-white hover:text-blue-500 
+                        transition duration-300 ease-in-out 
+                        border-4 border-blue-500">
+
+                    <div class="p-4 text-center">
+                        <p class="text-4xl font-extrabold tracking-tight">
+                            {{ __('Total Spent') }}
+                        </p>
+                        <p class="text-4xl opacity-80 mt-6">
+                            {{ $totalSpent }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>    
     </div>
 </x-app-layout>

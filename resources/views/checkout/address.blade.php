@@ -32,46 +32,46 @@
 	<div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-md rounded-2xl">
-                    <div class="mb-8 p-6 bg-blue-600 flex items-center shadow-lg">
-                        <div class="flex-none">
-                            <h1 class="font-bold text-xl text-white px-3">
-                                Select Your Address
-                            </h1>
+                <div class="mb-4 p-6 bg-blue-600 flex items-center shadow-lg">
+                    <div class="flex-none">
+                        <h1 class="font-bold text-xl text-white px-3">
+                            Select Your Address
+                        </h1>
+                    </div>
+
+                    <div class="flex-grow flex justify-center items-center text-m font-bold">
+                        <div class="flex items-center">
+                            <a href="{{ route('checkout.cart') }}" 
+                            class="{{ request()->routeIs('checkout.cart') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
+                                Cart
+                            </a>
+
+                            <i class="fa-solid fa-arrow-right-long text-blue-300 px-2"></i>    
+                            <a href="{{ route('checkout.address') }}" 
+                            class="{{ request()->routeIs('checkout.address') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
+                                Address
+                            </a>
+
+                            <i class="fa-solid fa-arrow-right-long text-blue-300 px-2"></i>    
+
+                            <a href="{{ route('checkout.review') }}" 
+                            class="{{ request()->routeIs('checkout.review') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
+                                Overview
+                            </a>
                         </div>
+                    </div>
 
-                        <div class="flex-grow flex justify-center items-center text-m font-bold">
-                            <div class="flex items-center">
-                                <a href="{{ route('checkout.cart') }}" 
-                                class="{{ request()->routeIs('checkout.cart') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
-                                    Cart
-                                </a>
+                    <div>
+                        <a href="{{ route('address.create') }}" 
+                            class="font-bold text-xl text-white px-3 underline">
+                                Or Create Cne
+                        </a>            
+                    </div>
 
-                                <i class="fa-solid fa-arrow-right-long text-blue-300 px-2"></i>    
-                                <a href="{{ route('checkout.address') }}" 
-                                class="{{ request()->routeIs('checkout.address') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
-                                    Address
-                                </a>
+                    <div class="flex-none w-[150px] hidden md:block"></div>
+                </div>                    
 
-                                <i class="fa-solid fa-arrow-right-long text-blue-300 px-2"></i>    
-
-                                <a href="{{ route('checkout.review') }}" 
-                                class="{{ request()->routeIs('checkout.review') ? 'text-white' : 'text-blue-300 hover:text-white' }} transition">
-                                    Overview
-                                </a>
-                            </div>
-                        </div>
-
-                        <div>
-                            <a href="{{ route('address.create') }}" 
-                                class="font-bold text-xl text-white px-3 underline">
-                                    Or Create Cne
-                            </a>            
-                        </div>
-
-                        <div class="flex-none w-[150px] hidden md:block"></div>
-                    </div>                    
-
-                <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8 p-4">
+                <div class="grid md:grid-cols-1 lg:grid-cols-2 gap-8 p-4 mb-4">
                     <div class="bg-white shadow-xl rounded-2xl flex flex-col h-full border border-blue-100">
                         <h1 class="bg-blue-600 rounded-t-2xl text-white font-extrabold text-2xl shadow-lg shadow-blue-500/50 p-4 mb-4"> 
                             Your Addresses

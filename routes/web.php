@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 // Free acces
@@ -16,8 +17,8 @@ Route::get('/categories/all', [CategoriesController::class, 'allCategories'])->n
 Route::get('/categories/filter' , [CategoriesController::class, 'filter'])->name('categories.filter');
 Route::get('/products/index', [ProductsController::class, 'index'])->name('products.index');
 Route::get('/products/index_data', [ProductsController::class, 'index_data'])->name('products.index_data');
+Route::get('/products/search', [ProductsController::class, 'search'])->name('products.search');
 Route::get('/products/{product}', [ProductsController::class, 'show'])->name('products.show');
-Route::get('/products/search' , [ProductsController::class, 'search'])->name('products.search');
 
 
 // Defult Route -> login required
@@ -28,7 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Customer dash
-    Route::get('/dashboard', function () { return view('dashboard.index');})->name('dashboard.index');
+    Route::get('/dashboard',[CustomerController::class, 'index'])->name('dashboard.index');
     
     // Vendor apply functions
     Route::get('/apply', [VendorController::class , 'apply'])->name('vendor.apply');

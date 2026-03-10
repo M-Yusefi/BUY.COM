@@ -1,7 +1,7 @@
 # BuyCom — Full-Stack E-Commerce Solution
 
 <p align="center">
-  <img src="logo/logo.png" width="250" style="background-color: #2563eb; padding: 24px; border-radius: 9999px;" alt="BuyCom Logo">
+  <img src="public/logo/logo.png" width="250" style="background-color: #2563eb; padding: 24px; border-radius: 9999px;" alt="BuyCom Logo">
 </p>
 
 <p align="center">
